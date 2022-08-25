@@ -1,8 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/api/server.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon server.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -12,5 +16,12 @@
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "sequelize": "^6.21.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.19",
+    "sequelize-cli": "^6.4.1"
   }
 }
