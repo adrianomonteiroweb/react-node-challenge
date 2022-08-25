@@ -14,7 +14,7 @@ const patiente_created = {
   firstName: 'Alex',
   lastName: 'Montes',
   email: 'alex@email.com',
-  numbe: '85989876655',
+  number: '85989876655',
   describe: '',
 };
 
