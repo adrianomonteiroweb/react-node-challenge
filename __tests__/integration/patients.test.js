@@ -19,7 +19,7 @@ const patiente_created = {
 };
 
 describe('# Patients', () => {
-  it('- It should be possible to add a new user.', async () => {
+  it.skip('- It should be possible to add a new user.', async () => {
     await frisby
       .post(`${create_url}/patient`, patiente_created)
       .expect('status', 201)
