@@ -1,7 +1,5 @@
 const patientRoutes = require('./patients.routes');
 
-const routes = {
-  patientRoutes,
-};
+const routes = [patientRoutes];
 
 module.exports = routes;
