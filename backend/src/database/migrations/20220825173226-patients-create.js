@@ -14,14 +14,6 @@ module.exports = {
       email: { type: Sequelize.STRING, allowNull: false, unique: true },
       number: { type: Sequelize.STRING, allowNull: false, unique: true },
       describe: { type: Sequelize.STRING },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
     });
   },
 

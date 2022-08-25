@@ -22,7 +22,7 @@ describe('# Patients', () => {
   it('- It should be possible to add a new user.', async () => {
     await frisby
       .post(`${create_url}/patient`, patiente_created)
-      .expect('status', 200)
+      .expect('status', 201)
       .then((response) => {
         const { body } = response;
 
