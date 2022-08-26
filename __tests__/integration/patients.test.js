@@ -1,4 +1,5 @@
 const frisby = require('frisby');
+const shell = require('shelljs');
 
 require('dotenv').config();
 
@@ -9,7 +10,7 @@ const create_url =
   process.env.DEV === 'true'
     ? `http://${HOST}:${PORT}`
     : process.env.DEPLOY_URL;
-console.log('TEST ', create_url);
+
 const patiente_created = {
   firstName: 'Alex',
   lastName: 'Montes',
@@ -19,13 +20,19 @@ const patiente_created = {
 };
 
 describe('# Patients', () => {
-  it.skip('- It should be possible to add a new user.', async () => {
+  beforeEach(() => {
+    shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+    shell.exec(
+      'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+    );
+  });
+
+  it('- It should be possible to add a new user.', async () => {
     await frisby
       .post(`${create_url}/patient`, patiente_created)
       .expect('status', 201)
       .then((response) => {
         const { body } = response;
-
         expect(patiente_created).toEqual(JSON.parse(body));
       });
   });
