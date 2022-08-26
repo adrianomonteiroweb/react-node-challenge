@@ -4,7 +4,7 @@ const { addPatientService } = require('../services/patientes.service');
 const addPatientController = async (req, res, next) => {
   try {
     const result = await addPatientService(req.body);
-    console.log('CONTROLLER ', result);
+
     return res.status(CREATED).json(result);
   } catch (error) {
     console.error(error.message);
