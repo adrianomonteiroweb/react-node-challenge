@@ -1,1 +1,1 @@
-exports = (status, message) => ({ status, message });
+exports.errorMessageConstructor = (status, message) => ({ status, message });

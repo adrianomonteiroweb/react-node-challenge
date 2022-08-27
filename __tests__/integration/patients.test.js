@@ -92,7 +92,7 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'Email' });
+      expect(frisby._json).toEqual({ message: '"email" is required' });
     });
 
     it('3/5 - It should not be possible to register a patient without the number.', async () => {
@@ -103,7 +103,7 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'Number' });
+      expect(frisby._json).toEqual({ message: '"number" is required' });
     });
 
     it('4/5 - It should not be possible to register a patient without the firstName.', async () => {
@@ -114,7 +114,7 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'FirstName' });
+      expect(frisby._json).toEqual({ message: '"firstName" is required' });
     });
 
     it('5/5 - It should not be possible to register a patient without the lastName.', async () => {
@@ -125,7 +125,7 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'LastName' });
+      expect(frisby._json).toEqual({ message: '"lastName" is required' });
     });
   });
 
@@ -145,7 +145,9 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'Email' });
+      expect(frisby._json).toEqual({
+        message: '"email" must be a valid email',
+      });
     });
 
     it('2/2 - It should not be possible to register a patient with the wrong number.', async () => {
@@ -156,7 +158,9 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: 'Number' });
+      expect(frisby._json).toEqual({
+        message: '"number" length must be at least 11 characters long',
+      });
     });
   });
 });
