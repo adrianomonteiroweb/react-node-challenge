@@ -1,6 +1,15 @@
+const {
+  errorMessageConstructor,
+} = require('../../utils/errorMessageConstructor');
+const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
 const { patients } = require('../models/index');
+const { patientSchema } = require('../schemas');
 
 const addPatientService = async (body) => {
+  const { error } = patientSchema.validate(body);
+
+  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
+
   const { firstName, lastName, email, number, describe } = body;
 
   const created = await patients.create({
