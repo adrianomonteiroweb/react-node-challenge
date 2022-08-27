@@ -1,5 +1,6 @@
-const frisby = require('frisby');
 const shell = require('shelljs');
+
+const { frisbyPostFunction } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
 
@@ -11,7 +12,7 @@ const create_url =
     ? `http://${HOST}:${PORT}`
     : process.env.DEPLOY_URL;
 
-const patiente_created = {
+const patient_created = {
   firstName: 'Alex',
   lastName: 'Montes',
   email: 'alex@email.com',
@@ -19,21 +20,143 @@ const patiente_created = {
   describe: '',
 };
 
-describe('# Patients', () => {
-  beforeEach(() => {
-    shell.exec('cd ./backend && yarn sequelize-cli db:drop');
-    shell.exec(
-      'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
-    );
+const patient_without_email = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  number: '85989876655',
+  describe: '',
+};
+
+const patient_without_number = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  email: 'alex@email.com',
+  describe: '',
+};
+
+const patient_without_firstName = {
+  lastName: 'Montes',
+  email: 'alex@email.com',
+  number: '85989876655',
+  describe: '',
+};
+
+const patient_without_lastName = {
+  firstName: 'Alex',
+  email: 'alex@email.com',
+  number: '85989876655',
+  describe: '',
+};
+
+const patient_with_wrong_email = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  email: 'alexemail.com',
+  number: '85989876655',
+  describe: '',
+};
+
+const patient_with_wrong_number = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  email: 'alex@email.com',
+  number: '8598987665',
+  describe: '',
+};
+
+describe('# Patients tests.', () => {
+  describe('Creating patients - Testing required fields.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it('1/5 - It should be possible to add a new user.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_created
+      );
+
+      expect(frisby._response.status).toEqual(201);
+      expect(frisby._json).toEqual(patient_created);
+    });
+
+    it('2/5 - It should not be possible to register a patient without the email.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_without_email
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'Email' });
+    });
+
+    it('3/5 - It should not be possible to register a patient without the number.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_without_number
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'Number' });
+    });
+
+    it('4/5 - It should not be possible to register a patient without the firstName.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_without_firstName
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'FirstName' });
+    });
+
+    it('5/5 - It should not be possible to register a patient without the lastName.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_without_lastName
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'LastName' });
+    });
   });
 
-  it('- It should be possible to add a new user.', async () => {
-    await frisby
-      .post(`${create_url}/patient`, patiente_created)
-      .expect('status', 201)
-      .then((response) => {
-        const { body } = response;
-        expect(patiente_created).toEqual(JSON.parse(body));
-      });
+  describe('Creating patients - Testing field formats.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it('1/2 - It should not be possible to register a patient with the wrong email address.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_with_wrong_email
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'Email' });
+    });
+
+    it('2/2 - It should not be possible to register a patient with the wrong number.', async () => {
+      const frisby = await frisbyPostFunction(
+        create_url,
+        'patient',
+        patient_with_wrong_number
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({ message: 'Number' });
+    });
   });
 });
