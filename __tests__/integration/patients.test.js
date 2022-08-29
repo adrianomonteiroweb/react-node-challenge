@@ -1,6 +1,9 @@
 const shell = require('shelljs');
 
-const { frisbyPostFunction } = require('../functions/frisbyFunctions');
+const {
+  frisbyPostFunction,
+  frisbyPutFunction,
+} = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
 
@@ -62,6 +65,14 @@ const patient_with_wrong_number = {
   email: 'alex@email.com',
   number: '8598987665',
   describe: '',
+};
+
+const patient_updated = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  email: 'alex@email.com',
+  number: '85989876655',
+  describe: 'Atualizado',
 };
 
 describe('# Patients tests.', () => {
@@ -160,6 +171,43 @@ describe('# Patients tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: '"number" length must be at least 11 characters long',
+      });
+    });
+  });
+
+  describe('Updating patients.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it('1/2 - It should be possible to update a patient successfully.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+
+      const frisby = await frisbyPutFunction(
+        create_url,
+        'patient/1',
+        patient_updated
+      );
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual(patient_updated);
+    });
+
+    it('2/2 - It should not be possible to update a patient with a non-existent ID.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+
+      const frisby = await frisbyPutFunction(
+        create_url,
+        'patient/2',
+        patient_updated
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to update by wrong ID.',
       });
     });
   });
