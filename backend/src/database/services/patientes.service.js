@@ -29,4 +29,23 @@ const addPatientService = async (body) => {
   };
 };
 
-module.exports = { addPatientService };
+const updatePatientService = async (id, body) => {
+  const { error } = patientSchema.validate(body);
+
+  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
+
+  const updated = await patients.update(body, {
+    where: {
+      id,
+    },
+  });
+
+  return updated[0] < 1
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to update by wrong ID.'
+      )
+    : updated;
+};
+
+module.exports = { addPatientService, updatePatientService };
