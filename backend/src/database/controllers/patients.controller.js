@@ -2,6 +2,7 @@ const { CREATED, OK } = require('../../utils/statusCodesConstructor');
 const {
   addPatientService,
   updatePatientService,
+  getPatientsService,
 } = require('../services/patientes.service');
 
 const addPatientController = async (req, res, next) => {
@@ -34,4 +35,23 @@ const updatePatientController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
-module.exports = { addPatientController, updatePatientController };
+const getPatientsController = async (_req, res, next) => {
+  let result;
+
+  try {
+    result = await getPatientsService();
+  } catch (error) {
+    console.error(error.message);
+    next(error);
+  }
+  console.log('CONTROLLER: ', result);
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
+module.exports = {
+  addPatientController,
+  updatePatientController,
+  getPatientsController,
+};
