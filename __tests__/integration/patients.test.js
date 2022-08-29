@@ -3,6 +3,7 @@ const shell = require('shelljs');
 const {
   frisbyPostFunction,
   frisbyPutFunction,
+  frisbyGetFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
@@ -21,6 +22,14 @@ const patient_created = {
   email: 'alex@email.com',
   number: '85989876655',
   describe: '',
+};
+
+const patient_created2 = {
+  firstName: 'Marcela',
+  lastName: 'Santos',
+  email: 'marcela@email.com',
+  number: '88999403456',
+  describe: 'Paciente VIP',
 };
 
 const patient_without_email = {
@@ -208,6 +217,66 @@ describe('# Patients tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: 'Error trying to update by wrong ID.',
+      });
+    });
+  });
+
+  describe('Gettings patients.', () => {
+    it.only('1/5 - It must be possible to search for all patients.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+      await frisbyPostFunction(create_url, 'patient', patient_created2);
+
+      const frisby = await frisbyGetFunction(create_url, 'patient');
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([patient_created, patient_created2]);
+    });
+
+    it('2/5 - It must be possible to search for a patient by ID..', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+      await frisbyPostFunction(create_url, 'patient', patient_created2);
+
+      const frisby = await frisbyGetFunction(create_url, 'patient/2');
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([patient_created2]);
+    });
+
+    it('3/5 - It must be possible to search for a patient by email.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+      await frisbyPostFunction(create_url, 'patient', patient_created2);
+
+      const frisby = await frisbyPostFunction(create_url, 'patient/email', {
+        email: patient_created2.email,
+      });
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([patient_created2]);
+    });
+
+    it('4/5 - It should not be possible to search for a patient by non-existent id.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+      await frisbyPostFunction(create_url, 'patient', patient_created2);
+
+      const frisby = await frisbyGetFunction(create_url, 'patient/3');
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to find patient with non-existent ID.',
+      });
+    });
+
+    it('5/5 - It should not be possible to search for a patient by non-existent email.', async () => {
+      await frisbyPostFunction(create_url, 'patient', patient_created);
+      await frisbyPostFunction(create_url, 'patient', patient_created2);
+
+      const frisby = await frisbyPostFunction(create_url, 'patient/email', {
+        email: 'bruno@email.com',
+      });
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to find patient with non-existent email.',
       });
     });
   });

@@ -5,3 +5,6 @@ exports.frisbyPostFunction = async (baseURL, alias, object) =>
 
 exports.frisbyPutFunction = async (baseURL, alias, object) =>
   await frisby.put(`${baseURL}/${alias}`, object);
+
+exports.frisbyGetFunction = async (baseURL, alias) =>
+  await frisby.get(`${baseURL}/${alias}`);
