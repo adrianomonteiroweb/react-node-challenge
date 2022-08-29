@@ -249,7 +249,7 @@ describe('# Patients tests.', () => {
       const frisby = await frisbyGetFunction(create_url, 'patient/2');
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual([patient_created2]);
+      expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
     });
 
     it('3/5 - It must be possible to search for a patient by email.', async () => {

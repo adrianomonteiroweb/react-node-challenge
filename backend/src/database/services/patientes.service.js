@@ -50,7 +50,7 @@ const updatePatientService = async (id, body) => {
 
 const getPatientsService = async () => {
   const allPatients = await patients.findAll();
-  console.log('SERVICE: ', allPatients);
+
   return allPatients.length < 1
     ? errorMessageConstructor(
         BAD_REQUEST,
@@ -59,8 +59,20 @@ const getPatientsService = async () => {
     : allPatients;
 };
 
+const getPatientByIDService = async (id) => {
+  const patientByID = await patients.findByPk(id);
+
+  return !patientByID.email
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'It was not possible to search all patients.'
+      )
+    : patientByID;
+};
+
 module.exports = {
   addPatientService,
   updatePatientService,
   getPatientsService,
+  getPatientByIDService,
 };

@@ -3,6 +3,7 @@ const {
   addPatientService,
   updatePatientService,
   getPatientsService,
+  getPatientByIDService,
 } = require('../services/patientes.service');
 
 const addPatientController = async (req, res, next) => {
@@ -44,7 +45,22 @@ const getPatientsController = async (_req, res, next) => {
     console.error(error.message);
     next(error);
   }
-  console.log('CONTROLLER: ', result);
+
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
+const getPatientByIDController = async (req, res, next) => {
+  let result;
+
+  try {
+    result = await getPatientByIDService(req.params.id);
+  } catch (error) {
+    console.error(error.message);
+    next(error);
+  }
+
   return result.status
     ? res.status(result.status).json({ message: result.message })
     : res.status(OK).json(result);
@@ -54,4 +70,5 @@ module.exports = {
   addPatientController,
   updatePatientController,
   getPatientsController,
+  getPatientByIDController,
 };
