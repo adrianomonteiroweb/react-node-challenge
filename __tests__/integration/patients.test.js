@@ -222,14 +222,24 @@ describe('# Patients tests.', () => {
   });
 
   describe('Gettings patients.', () => {
-    it.only('1/5 - It must be possible to search for all patients.', async () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it('1/5 - It must be possible to search for all patients.', async () => {
       await frisbyPostFunction(create_url, 'patient', patient_created);
       await frisbyPostFunction(create_url, 'patient', patient_created2);
 
       const frisby = await frisbyGetFunction(create_url, 'patient');
-
+      console.log('TEST: ', frisby);
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual([patient_created, patient_created2]);
+      expect(frisby._json).toEqual([
+        { ...patient_created, id: 1 },
+        { ...patient_created2, id: 2 },
+      ]);
     });
 
     it('2/5 - It must be possible to search for a patient by ID..', async () => {

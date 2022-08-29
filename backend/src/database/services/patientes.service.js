@@ -48,4 +48,19 @@ const updatePatientService = async (id, body) => {
     : updated;
 };
 
-module.exports = { addPatientService, updatePatientService };
+const getPatientsService = async () => {
+  const allPatients = await patients.findAll();
+  console.log('SERVICE: ', allPatients);
+  return allPatients.length < 1
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'It was not possible to search all patients.'
+      )
+    : allPatients;
+};
+
+module.exports = {
+  addPatientService,
+  updatePatientService,
+  getPatientsService,
+};
