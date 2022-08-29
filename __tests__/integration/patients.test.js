@@ -193,7 +193,7 @@ describe('# Patients tests.', () => {
       );
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual(patient_updated);
+      expect(frisby._json).toEqual([1]);
     });
 
     it('2/2 - It should not be possible to update a patient with a non-existent ID.', async () => {
