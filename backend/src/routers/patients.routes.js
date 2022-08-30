@@ -3,6 +3,7 @@ const {
   updatePatientController,
   getPatientsController,
   getPatientByIDController,
+  getPatientByEmailController,
 } = require('../database/controllers/patients.controller');
 
 const patientRoutes = require('express').Router();
@@ -15,6 +16,6 @@ patientRoutes.get('/patient', getPatientsController);
 
 patientRoutes.get('/patient/:id', getPatientByIDController);
 
-patientRoutes.put('/patient/email');
+patientRoutes.post('/patient/email', getPatientByEmailController);
 
 module.exports = patientRoutes;

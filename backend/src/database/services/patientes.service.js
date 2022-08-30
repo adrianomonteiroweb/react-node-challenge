@@ -62,12 +62,25 @@ const getPatientsService = async () => {
 const getPatientByIDService = async (id) => {
   const patientByID = await patients.findByPk(id);
 
-  return !patientByID.email
+  return !patientByID
     ? errorMessageConstructor(
         BAD_REQUEST,
-        'It was not possible to search all patients.'
+        'Error trying to find patient with non-existent ID.'
       )
     : patientByID;
+};
+
+const getPatientByEmailService = async (email) => {
+  const patientByEmail = await patients.findOne({
+    where: { email },
+  });
+
+  return !patientByEmail
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to find patient with non-existent email.'
+      )
+    : patientByEmail;
 };
 
 module.exports = {
@@ -75,4 +88,5 @@ module.exports = {
   updatePatientService,
   getPatientsService,
   getPatientByIDService,
+  getPatientByEmailService,
 };
