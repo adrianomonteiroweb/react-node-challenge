@@ -8,3 +8,6 @@ exports.frisbyPutFunction = async (baseURL, alias, object) =>
 
 exports.frisbyGetFunction = async (baseURL, alias) =>
   await frisby.get(`${baseURL}/${alias}`);
+
+exports.frisbyDeleteFunction = async (baseURL, alias) =>
+  await frisby.delete(`${baseURL}/${alias}`);
