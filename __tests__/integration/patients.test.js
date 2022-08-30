@@ -234,7 +234,7 @@ describe('# Patients tests.', () => {
       await frisbyPostFunction(create_url, 'patient', patient_created2);
 
       const frisby = await frisbyGetFunction(create_url, 'patient');
-      console.log('TEST: ', frisby);
+
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual([
         { ...patient_created, id: 1 },
@@ -261,7 +261,7 @@ describe('# Patients tests.', () => {
       });
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual([patient_created2]);
+      expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
     });
 
     it('4/5 - It should not be possible to search for a patient by non-existent id.', async () => {
