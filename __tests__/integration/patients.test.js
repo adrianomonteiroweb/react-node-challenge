@@ -300,7 +300,7 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it.skip('1/2 - It should be possible to delete a patient by their ID.', async () => {
+    it('1/2 - It should be possible to delete a patient by their ID.', async () => {
       await frisbyPostFunction(create_url, 'patient', patient_created);
       await frisbyPostFunction(create_url, 'patient', patient_created2);
 
@@ -317,7 +317,7 @@ describe('# Patients tests.', () => {
       expect(frisbyGetAll._json).toEqual([{ ...patient_created2, id: 2 }]);
     });
 
-    it.skip('2/2 - It should not be possible to delete a patient with a non-existent ID.', async () => {
+    it('2/2 - It should not be possible to delete a patient with a non-existent ID.', async () => {
       await frisbyPostFunction(create_url, 'patient', patient_created);
 
       const frisbyDelete = await frisbyDeleteFunction(create_url, 'patient/2');

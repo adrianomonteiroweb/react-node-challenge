@@ -1,7 +1,11 @@
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
-const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
+const {
+  BAD_REQUEST,
+  OK,
+  NOT_FOUND,
+} = require('../../utils/statusCodesConstructor');
 const { patients } = require('../models/index');
 const { patientSchema } = require('../schemas');
 
@@ -83,10 +87,29 @@ const getPatientByEmailService = async (email) => {
     : patientByEmail;
 };
 
+const deletePatientService = async (id) => {
+  const deleted = await patients.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return deleted < 1
+    ? errorMessageConstructor(
+        NOT_FOUND,
+        'Error ao tentar deletar paciente com ID inexistente.'
+      )
+    : errorMessageConstructor(
+        OK,
+        `Paciente de ID: ${id} deletado com sucesso.`
+      );
+};
+
 module.exports = {
   addPatientService,
   updatePatientService,
   getPatientsService,
   getPatientByIDService,
   getPatientByEmailService,
+  deletePatientService,
 };
