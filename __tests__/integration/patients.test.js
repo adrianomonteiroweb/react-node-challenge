@@ -12,7 +12,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || 'localhost';
 
-const create_url =
+const base_url =
   process.env.DEV === 'true'
     ? `http://${HOST}:${PORT}`
     : process.env.DEPLOY_URL;
@@ -94,9 +94,9 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/5 - It should be possible to add a new user.', async () => {
+    it.skip('1/5 - It should be possible to add a new user.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_created
       );
@@ -105,9 +105,9 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual(patient_created);
     });
 
-    it('2/5 - It should not be possible to register a patient without the email.', async () => {
+    it.skip('2/5 - It should not be possible to register a patient without the email.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_without_email
       );
@@ -116,9 +116,9 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"email" is required' });
     });
 
-    it('3/5 - It should not be possible to register a patient without the number.', async () => {
+    it.skip('3/5 - It should not be possible to register a patient without the number.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_without_number
       );
@@ -127,9 +127,9 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"number" is required' });
     });
 
-    it('4/5 - It should not be possible to register a patient without the firstName.', async () => {
+    it.skip('4/5 - It should not be possible to register a patient without the firstName.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_without_firstName
       );
@@ -138,9 +138,9 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"firstName" is required' });
     });
 
-    it('5/5 - It should not be possible to register a patient without the lastName.', async () => {
+    it.skip('5/5 - It should not be possible to register a patient without the lastName.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_without_lastName
       );
@@ -158,9 +158,9 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/2 - It should not be possible to register a patient with the wrong email address.', async () => {
+    it.skip('1/2 - It should not be possible to register a patient with the wrong email address.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_with_wrong_email
       );
@@ -171,9 +171,9 @@ describe('# Patients tests.', () => {
       });
     });
 
-    it('2/2 - It should not be possible to register a patient with the wrong number.', async () => {
+    it.skip('2/2 - It should not be possible to register a patient with the wrong number.', async () => {
       const frisby = await frisbyPostFunction(
-        create_url,
+        base_url,
         'patient',
         patient_with_wrong_number
       );
@@ -193,11 +193,11 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/2 - It should be possible to update a patient successfully.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
+    it.skip('1/2 - It should be possible to update a patient successfully.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
 
       const frisby = await frisbyPutFunction(
-        create_url,
+        base_url,
         'patient/1',
         patient_updated
       );
@@ -206,11 +206,11 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual([1]);
     });
 
-    it('2/2 - It should not be possible to update a patient with a non-existent ID.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
+    it.skip('2/2 - It should not be possible to update a patient with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
 
       const frisby = await frisbyPutFunction(
-        create_url,
+        base_url,
         'patient/2',
         patient_updated
       );
@@ -230,11 +230,11 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/5 - It must be possible to search for all patients.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('1/5 - It must be possible to search for all patients.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisby = await frisbyGetFunction(create_url, 'patient');
+      const frisby = await frisbyGetFunction(base_url, 'patient');
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual([
@@ -243,21 +243,21 @@ describe('# Patients tests.', () => {
       ]);
     });
 
-    it('2/5 - It must be possible to search for a patient by ID..', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('2/5 - It must be possible to search for a patient by ID..', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisby = await frisbyGetFunction(create_url, 'patient/2');
+      const frisby = await frisbyGetFunction(base_url, 'patient/2');
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
     });
 
-    it('3/5 - It must be possible to search for a patient by email.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('3/5 - It must be possible to search for a patient by email.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisby = await frisbyPostFunction(create_url, 'patient/email', {
+      const frisby = await frisbyPostFunction(base_url, 'patient/email', {
         email: patient_created2.email,
       });
 
@@ -265,11 +265,11 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
     });
 
-    it('4/5 - It should not be possible to search for a patient by non-existent id.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('4/5 - It should not be possible to search for a patient by non-existent id.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisby = await frisbyGetFunction(create_url, 'patient/3');
+      const frisby = await frisbyGetFunction(base_url, 'patient/3');
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
@@ -277,11 +277,11 @@ describe('# Patients tests.', () => {
       });
     });
 
-    it('5/5 - It should not be possible to search for a patient by non-existent email.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('5/5 - It should not be possible to search for a patient by non-existent email.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisby = await frisbyPostFunction(create_url, 'patient/email', {
+      const frisby = await frisbyPostFunction(base_url, 'patient/email', {
         email: 'bruno@email.com',
       });
 
@@ -292,7 +292,7 @@ describe('# Patients tests.', () => {
     });
   });
 
-  describe.only('Delete patients.', () => {
+  describe('Delete patients.', () => {
     beforeEach(() => {
       shell.exec('cd ./backend && yarn sequelize-cli db:drop');
       shell.exec(
@@ -300,27 +300,27 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/2 - It should be possible to delete a patient by their ID.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
-      await frisbyPostFunction(create_url, 'patient', patient_created2);
+    it.skip('1/2 - It should be possible to delete a patient by their ID.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
+      await frisbyPostFunction(base_url, 'patient', patient_created2);
 
-      const frisbyDelete = await frisbyDeleteFunction(create_url, 'patient/1');
+      const frisbyDelete = await frisbyDeleteFunction(base_url, 'patient/1');
 
       expect(frisbyDelete._response.status).toEqual(200);
       expect(frisbyDelete._json).toEqual({
         message: 'Paciente de ID: 1 deletado com sucesso.',
       });
 
-      const frisbyGetAll = await frisbyGetFunction(create_url, 'patient');
+      const frisbyGetAll = await frisbyGetFunction(base_url, 'patient');
 
       expect(frisbyGetAll._response.status).toEqual(200);
       expect(frisbyGetAll._json).toEqual([{ ...patient_created2, id: 2 }]);
     });
 
-    it('2/2 - It should not be possible to delete a patient with a non-existent ID.', async () => {
-      await frisbyPostFunction(create_url, 'patient', patient_created);
+    it.skip('2/2 - It should not be possible to delete a patient with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'patient', patient_created);
 
-      const frisbyDelete = await frisbyDeleteFunction(create_url, 'patient/2');
+      const frisbyDelete = await frisbyDeleteFunction(base_url, 'patient/2');
 
       expect(frisbyDelete._response.status).toEqual(404);
       expect(frisbyDelete._json).toEqual({
