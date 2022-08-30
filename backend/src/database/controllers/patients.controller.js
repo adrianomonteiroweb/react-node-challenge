@@ -5,6 +5,7 @@ const {
   getPatientsService,
   getPatientByIDService,
   getPatientByEmailService,
+  deletePatientService,
 } = require('../services/patientes.service');
 
 const addPatientController = async (req, res, next) => {
@@ -82,10 +83,26 @@ const getPatientByEmailController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
+const deletePatientController = async (req, res, next) => {
+  let result;
+
+  try {
+    result = await deletePatientService(req.params.id);
+  } catch (error) {
+    console.error(error.message);
+    next(error);
+  }
+
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
 module.exports = {
   addPatientController,
   updatePatientController,
   getPatientsController,
   getPatientByIDController,
   getPatientByEmailController,
+  deletePatientController,
 };
