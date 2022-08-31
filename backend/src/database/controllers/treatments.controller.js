@@ -1,5 +1,6 @@
 const { CREATED } = require('../../utils/statusCodesConstructor');
 const { tryQueryServer } = require('../../utils/tryServer');
+const { addTreatmentServer } = require('../services/treatments.service');
 
 const addTreatmentController = async (req, res, next) => {
   const result = await tryQueryServer(addTreatmentServer, [req.body], next);
