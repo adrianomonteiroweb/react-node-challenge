@@ -6,6 +6,7 @@ const {
   getTreatmentsService,
   getTreatmentByIDService,
   getTreatmentByPatientService,
+  deleteTreatmentService,
 } = require('../services/treatments.service');
 
 const addTreatmentController = async (req, res, next) => {
@@ -60,10 +61,23 @@ const getTreatmentByPatientController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
+const deleteTreatmentController = async (req, res, next) => {
+  const result = await tryQueryServer(
+    deleteTreatmentService,
+    [req.params.id],
+    next
+  );
+
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
 module.exports = {
   addTreatmentController,
   updateTreatmentController,
   getTreatmentsController,
   getTreatmentByIDController,
   getTreatmentByPatientController,
+  deleteTreatmentController,
 };
