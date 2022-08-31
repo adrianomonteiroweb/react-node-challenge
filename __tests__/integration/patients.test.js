@@ -88,9 +88,9 @@ const patient_updated = {
 describe('# Patients tests.', () => {
   describe('Creating patients - Testing required fields.', () => {
     beforeEach(() => {
-      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec('cd ./packages/backend && yarn sequelize-cli db:drop');
       shell.exec(
-        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+        'cd ./packages/backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
       );
     });
 
