@@ -1,5 +1,7 @@
 const shell = require('shelljs');
 
+const { frisbyPostFunction } = require('../functions/frisbyFunctions');
+
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -10,21 +12,17 @@ const base_url =
     ? `http://${HOST}:${PORT}`
     : process.env.DEPLOY_URL;
 
-let date = new Date();
-let formated_date =
-  date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+let formated_date = new Date();
 
 const new_treatment = {
   patientID: 1,
-  startDate: formated_date,
-  endDate: null,
+  startDate: `${formated_date}`,
   treatment_value: 500,
   number_installments: 5,
 };
 
 const treatment_without_patient = {
   startDate: formated_date,
-  endDate: null,
   treatment_value: 500,
   number_installments: 5,
 };
@@ -32,14 +30,12 @@ const treatment_without_patient = {
 const treatment_without_value = {
   patientID: 1,
   startDate: formated_date,
-  endDate: null,
   number_installments: 5,
 };
 
 const treatment_without_installments = {
   patientID: 1,
   startDate: formated_date,
-  endDate: null,
   treatment_value: 500,
 };
 
@@ -52,7 +48,7 @@ describe('# Treatment tests.', () => {
       );
     });
 
-    it.skip('1/4 - It should be possible to add a new treatment.', async () => {
+    it.only('1/4 - It should be possible to add a new treatment.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'treatment',

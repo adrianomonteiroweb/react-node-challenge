@@ -9,3 +9,11 @@ exports.patientSchema = Joi.object({
   number: Joi.string().min(11).required(),
   describe: Joi.optional(),
 });
+
+exports.treatmentSchema = Joi.object({
+  patientID: Joi.number().required(),
+  startDate: Joi.date().required(),
+  endDate: Joi.date().optional(),
+  treatment_value: Joi.number().required(),
+  number_installments: Joi.number().required(),
+});
