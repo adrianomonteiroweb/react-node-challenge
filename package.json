@@ -2,6 +2,7 @@
   "name": "react-node-challenge",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "repository": "git@github.com:adrianomonteiroweb/react-node-challenge.git",
   "author": "Adriano monteiro <adrianomonteiroweb@gmail.com>",
   "license": "MIT",
@@ -21,5 +22,10 @@
   "dependencies": {
     "@pm2/pm2-version-check": "pm2/pm2-version-check",
     "pm2": "^5.2.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   }
 }
