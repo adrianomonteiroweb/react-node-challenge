@@ -3,7 +3,7 @@ const {
 } = require('../../utils/errorMessageConstructor');
 const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
 const { payments } = require('../models/index');
-const { paymentSchema } = require('../schemas');
+const { paymentSchema, paymentUpdateSchema } = require('../schemas');
 
 const addPaymentServer = async (body) => {
   const { error } = paymentSchema.validate(body);
@@ -33,4 +33,23 @@ const addPaymentServer = async (body) => {
   };
 };
 
-module.exports = { addPaymentServer };
+const updatePaymentService = async (id, body) => {
+  const { error } = paymentUpdateSchema.validate(body);
+
+  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
+
+  const updated = await payments.update(body, {
+    where: {
+      id,
+    },
+  });
+
+  return updated[0] < 1
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to update by wrong ID.'
+      )
+    : updated;
+};
+
+module.exports = { addPaymentServer, updatePaymentService };
