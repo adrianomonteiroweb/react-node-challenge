@@ -3,6 +3,7 @@ const shell = require('shelljs');
 const {
   frisbyPostFunction,
   frisbyPutFunction,
+  frisbyGetFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
@@ -19,14 +20,14 @@ let formated_date = new Date();
 
 const new_treatment = {
   patientID: 1,
-  startDate: `${formated_date}`,
+  startDate: formated_date,
   treatment_value: 500,
   number_installments: 5,
 };
 
 const new_treatment2 = {
   patientID: 2,
-  startDate: `${formated_date}`,
+  startDate: formated_date,
   treatment_value: 1000,
   number_installments: 10,
 };
@@ -180,11 +181,14 @@ describe('# Treatment tests.', () => {
 
       const frisby = await frisbyGetFunction(base_url, 'treatment');
 
+      frisby._json.map((treatment) => {
+        treatment['startDate'] = new Date(`${treatment.startDate}`);
+      });
+
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual([
-        { ...new_treatment, id: 1 },
-        { ...new_treatment2, id: 2 },
-      ]);
+      expect(frisby._json.length).toBe(2);
+      expect(frisby._json[0].patientID).toBe(new_treatment.patientID);
+      expect(frisby._json[1].patientID).toBe(new_treatment2.patientID);
     });
 
     it.skip('2/5 - It must be possible to search for a treatment by ID..', async () => {
@@ -194,7 +198,7 @@ describe('# Treatment tests.', () => {
       const frisby = await frisbyGetFunction(base_url, 'treatment/2');
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual({ ...new_treatment2, id: 2 });
+      expect(frisby._json.patientID).toBe(new_treatment2.patientID);
     });
 
     it.skip('3/5 - It must be possible to search for a treatment by patient.', async () => {
@@ -204,7 +208,7 @@ describe('# Treatment tests.', () => {
       const frisby = await frisbyGetFunction(base_url, 'treatment/patient/2');
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual({ ...new_treatment2, id: 2 });
+      expect(frisby._json.patientID).toBe(new_treatment2.patientID);
     });
 
     it.skip('4/5 - It should not be possible to search for a treatment by non-existent id.', async () => {

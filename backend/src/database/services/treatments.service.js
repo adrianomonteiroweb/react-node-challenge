@@ -60,7 +60,45 @@ const updateTreatmentService = async (id, body) => {
     : updated;
 };
 
+const getTreatmentsService = async () => {
+  let allTreatments = await treatments.findAll();
+
+  return allTreatments.length < 1
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'It was not possible to search all treatments.'
+      )
+    : allTreatments;
+};
+
+const getTreatmentByIDService = async (id) => {
+  const treatmentByID = await treatments.findByPk(id);
+
+  return !treatmentByID
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to find treatment with non-existent ID.'
+      )
+    : treatmentByID;
+};
+
+const getTreatmentByPatientService = async (patientID) => {
+  const treatmentByPatient = await treatments.findOne({
+    where: { patientID },
+  });
+
+  return !treatmentByPatient
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to find treatment with non-existent patient.'
+      )
+    : treatmentByPatient;
+};
+
 module.exports = {
   addTreatmentServer,
   updateTreatmentService,
+  getTreatmentsService,
+  getTreatmentByIDService,
+  getTreatmentByPatientService,
 };
