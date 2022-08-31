@@ -1,5 +1,8 @@
 const shell = require('shelljs');
-const { frisbyPostFunction } = require('../functions/frisbyFunctions');
+const {
+  frisbyPostFunction,
+  frisbyPutFunction,
+} = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
 
@@ -46,7 +49,7 @@ const payment_without_installment = {
 };
 
 const payment_updated_installment = {
-  installment: 1,
+  installment: 2,
 };
 
 describe('# Payment tests.', () => {
@@ -111,39 +114,26 @@ describe('# Payment tests.', () => {
       );
     });
 
-    it.skip('1/3 - It should be possible to update a payment successfully.', async () => {
+    it.skip('1/2 - It should be possible to update a instalmment successfully.', async () => {
       await frisbyPostFunction(base_url, 'payment', new_payment);
 
       const frisby = await frisbyPutFunction(
         base_url,
         'payment/1',
-        payment_updated_value
+        payment_updated_installment
       );
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual([1]);
     });
 
-    it.skip('2/3 - It should be possible to update a payment successfully.', async () => {
-      await frisbyPostFunction(base_url, 'payment', new_payment);
-
-      const frisby = await frisbyPutFunction(
-        base_url,
-        'payment/1',
-        payment_updated_end_date
-      );
-
-      expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual([1]);
-    });
-
-    it.skip('3/3 - It should not be possible to update a patient with a non-existent ID.', async () => {
+    it.skip('2/2 - It should not be possible to update a patient with a non-existent ID.', async () => {
       await frisbyPostFunction(base_url, 'payment', new_payment);
 
       const frisby = await frisbyPutFunction(
         base_url,
         'payment/2',
-        payment_updated_value
+        payment_updated_installment
       );
 
       expect(frisby._response.status).toEqual(400);
