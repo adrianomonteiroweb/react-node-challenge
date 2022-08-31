@@ -1,0 +1,8 @@
+apps:
+  - name: reactnode-backend
+    script: ./backend/src/api/server.js
+    exec_mode: cluster
+    instances: 2
+    max_restarts: 2
+    max_memory_restart: 200M
+    watch: true
