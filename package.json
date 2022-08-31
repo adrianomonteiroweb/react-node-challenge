@@ -6,6 +6,7 @@
   "author": "Adriano monteiro <adrianomonteiroweb@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "pm2-runtime start pm2.backend.config.yml",
     "test": "jest --runInBand --detectOpenHandles --forceExit --verbose",
     "test:dev": "DEV=true npm run jest -- --runInBand --detectOpenHandles --forceExit --verbose"
   },
@@ -16,5 +17,9 @@
     "sequelize-cli": "^6.4.1",
     "shelljs": "^0.8.5",
     "sinon": "^14.0.0"
+  },
+  "dependencies": {
+    "@pm2/pm2-version-check": "pm2/pm2-version-check",
+    "pm2": "^5.2.0"
   }
 }
