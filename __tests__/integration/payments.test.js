@@ -2,6 +2,7 @@ const shell = require('shelljs');
 const {
   frisbyPostFunction,
   frisbyPutFunction,
+  frisbyGetFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
@@ -156,10 +157,6 @@ describe('# Payment tests.', () => {
       await frisbyPostFunction(base_url, 'payment', new_payment2);
 
       const frisby = await frisbyGetFunction(base_url, 'payment');
-
-      frisby._json.map((payment) => {
-        payment['startDate'] = new Date(`${payment.startDate}`);
-      });
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json.length).toBe(2);
