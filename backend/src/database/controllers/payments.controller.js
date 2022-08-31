@@ -6,6 +6,7 @@ const {
   getPaymentsService,
   getPaymentByIDService,
   getPaymentByPatientService,
+  deletePaymentService,
 } = require('../services/payments.service');
 
 const addPaymentController = async (req, res, next) => {
@@ -60,10 +61,23 @@ const getPaymentByPatientController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
+const deletePaymentController = async (req, res, next) => {
+  const result = await tryQueryServer(
+    deletePaymentService,
+    [req.params.id],
+    next
+  );
+
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
 module.exports = {
   addPaymentController,
   updatePaymentController,
   getPaymentsController,
   getPaymentByIDController,
   getPaymentByPatientController,
+  deletePaymentController,
 };

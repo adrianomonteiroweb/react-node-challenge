@@ -1,7 +1,11 @@
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
-const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
+const {
+  BAD_REQUEST,
+  OK,
+  NOT_FOUND,
+} = require('../../utils/statusCodesConstructor');
 const { payments } = require('../models/index');
 const { paymentSchema, paymentUpdateSchema } = require('../schemas');
 
@@ -87,10 +91,26 @@ const getPaymentByPatientService = async (patientID) => {
     : paymentByPatient;
 };
 
+const deletePaymentService = async (id) => {
+  const deleted = await payments.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return deleted < 1
+    ? errorMessageConstructor(
+        NOT_FOUND,
+        'Error when trying to delete payment with non-existent ID.'
+      )
+    : errorMessageConstructor(OK, `ID handling: ${id} deleted successfully.`);
+};
+
 module.exports = {
   addPaymentServer,
   updatePaymentService,
   getPaymentsService,
   getPaymentByIDService,
   getPaymentByPatientService,
+  deletePaymentService,
 };
