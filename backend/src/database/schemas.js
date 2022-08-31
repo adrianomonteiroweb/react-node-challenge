@@ -23,3 +23,15 @@ exports.treatmentUpdateSchema = Joi.object({
   treatment_value: Joi.number().optional(),
   number_installments: Joi.number().optional(),
 });
+
+exports.paymentSchema = Joi.object({
+  patientID: Joi.number().required(),
+  treatmentID: Joi.number().required(),
+  paymentDate: Joi.date().required(),
+  installment: Joi.number().required(),
+});
+
+exports.paymentUpdateSchema = Joi.object({
+  paymentDate: Joi.date().optional(),
+  installment: Joi.number().optional(),
+});

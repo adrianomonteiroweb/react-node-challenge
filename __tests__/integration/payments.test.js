@@ -1,11 +1,5 @@
 const shell = require('shelljs');
-
-const {
-  frisbyPostFunction,
-  frisbyPutFunction,
-  frisbyGetFunction,
-  frisbyDeleteFunction,
-} = require('../functions/frisbyFunctions');
+const { frisbyPostFunction } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
 
@@ -64,11 +58,11 @@ describe('# Payment tests.', () => {
       );
     });
 
-    it.only('1/4 - It should be possible to add a new payment.', async () => {
+    it.skip('1/4 - It should be possible to add a new payment.', async () => {
       const frisby = await frisbyPostFunction(base_url, 'payment', new_payment);
 
       expect(frisby._response.status).toEqual(201);
-      expect(frisby._json).toEqual(new_payment);
+      expect(frisby._json.patientID).toEqual(new_payment.patientID);
     });
 
     it.skip('2/4 - It should not be possible to register a payment without the patient.', async () => {
@@ -86,12 +80,12 @@ describe('# Payment tests.', () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'payment',
-        payment_without_value
+        payment_without_treatment
       );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"payment_value" is required',
+        message: '"treatmentID" is required',
       });
     });
 
@@ -99,12 +93,12 @@ describe('# Payment tests.', () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'payment',
-        payment_without_installments
+        payment_without_installment
       );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"number_installments" is required',
+        message: '"installment" is required',
       });
     });
   });
