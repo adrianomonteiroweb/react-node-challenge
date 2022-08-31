@@ -3,6 +3,7 @@ const {
   frisbyPostFunction,
   frisbyPutFunction,
   frisbyGetFunction,
+  frisbyDeleteFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
