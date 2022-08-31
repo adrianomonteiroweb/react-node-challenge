@@ -1,6 +1,9 @@
-const { CREATED } = require('../../utils/statusCodesConstructor');
+const { CREATED, OK } = require('../../utils/statusCodesConstructor');
 const { tryQueryServer } = require('../../utils/tryServer');
-const { addTreatmentServer } = require('../services/treatments.service');
+const {
+  addTreatmentServer,
+  updateTreatmentService,
+} = require('../services/treatments.service');
 
 const addTreatmentController = async (req, res, next) => {
   const result = await tryQueryServer(addTreatmentServer, [req.body], next);
@@ -10,4 +13,19 @@ const addTreatmentController = async (req, res, next) => {
     : res.status(CREATED).json(result);
 };
 
-module.exports = { addTreatmentController };
+const updateTreatmentController = async (req, res, next) => {
+  const result = await tryQueryServer(
+    updateTreatmentService,
+    [req.params.id, req.body],
+    next
+  );
+
+  return result.status
+    ? res.status(result.status).json({ message: result.message })
+    : res.status(OK).json(result);
+};
+
+module.exports = {
+  addTreatmentController,
+  updateTreatmentController,
+};

@@ -17,3 +17,9 @@ exports.treatmentSchema = Joi.object({
   treatment_value: Joi.number().required(),
   number_installments: Joi.number().required(),
 });
+
+exports.treatmentUpdateSchema = Joi.object({
+  endDate: Joi.date().optional(),
+  treatment_value: Joi.number().optional(),
+  number_installments: Joi.number().optional(),
+});

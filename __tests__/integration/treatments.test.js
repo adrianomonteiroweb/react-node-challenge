@@ -1,6 +1,9 @@
 const shell = require('shelljs');
 
-const { frisbyPostFunction } = require('../functions/frisbyFunctions');
+const {
+  frisbyPostFunction,
+  frisbyPutFunction,
+} = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
 
@@ -39,6 +42,15 @@ const treatment_without_installments = {
   treatment_value: 500,
 };
 
+const treatment_updated_value = {
+  treatment_value: 500,
+  number_installments: 10,
+};
+
+const treatment_updated_end_date = {
+  endDate: `${new Date('5/12/222')}`,
+};
+
 describe('# Treatment tests.', () => {
   describe('Creating treatments - Testing required fields.', () => {
     beforeEach(() => {
@@ -48,7 +60,7 @@ describe('# Treatment tests.', () => {
       );
     });
 
-    it.only('1/4 - It should be possible to add a new treatment.', async () => {
+    it.skip('1/4 - It should be possible to add a new treatment.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'treatment',
@@ -93,6 +105,56 @@ describe('# Treatment tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: '"number_installments" is required',
+      });
+    });
+  });
+
+  describe('Updating treatments.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it.skip('1/3 - It should be possible to update a treatment successfully.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'treatment/1',
+        treatment_updated_value
+      );
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([1]);
+    });
+
+    it.skip('2/3 - It should be possible to update a treatment successfully.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'treatment/1',
+        treatment_updated_end_date
+      );
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([1]);
+    });
+
+    it.skip('3/3 - It should not be possible to update a patient with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'treatment/2',
+        treatment_updated_value
+      );
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to update by wrong ID.',
       });
     });
   });

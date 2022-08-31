@@ -1,7 +1,7 @@
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
-const { treatmentSchema } = require('../schemas');
+const { treatmentSchema, treatmentUpdateSchema } = require('../schemas');
 const { treatments } = require('../models/index');
 const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
 
@@ -41,4 +41,26 @@ const addTreatmentServer = async (body) => {
   };
 };
 
-module.exports = { addTreatmentServer };
+const updateTreatmentService = async (id, body) => {
+  const { error } = treatmentUpdateSchema.validate(body);
+
+  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
+
+  const updated = await treatments.update(body, {
+    where: {
+      id,
+    },
+  });
+
+  return updated[0] < 1
+    ? errorMessageConstructor(
+        BAD_REQUEST,
+        'Error trying to update by wrong ID.'
+      )
+    : updated;
+};
+
+module.exports = {
+  addTreatmentServer,
+  updateTreatmentService,
+};
