@@ -24,6 +24,13 @@ const new_treatment = {
   number_installments: 5,
 };
 
+const new_treatment2 = {
+  patientID: 2,
+  startDate: `${formated_date}`,
+  treatment_value: 1000,
+  number_installments: 10,
+};
+
 const treatment_without_patient = {
   startDate: formated_date,
   treatment_value: 500,
@@ -155,6 +162,72 @@ describe('# Treatment tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: 'Error trying to update by wrong ID.',
+      });
+    });
+  });
+
+  describe('Gettings treatments.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it.skip('1/5 - It must be possible to search for all treatments.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisby = await frisbyGetFunction(base_url, 'treatment');
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual([
+        { ...new_treatment, id: 1 },
+        { ...new_treatment2, id: 2 },
+      ]);
+    });
+
+    it.skip('2/5 - It must be possible to search for a treatment by ID..', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisby = await frisbyGetFunction(base_url, 'treatment/2');
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual({ ...new_treatment2, id: 2 });
+    });
+
+    it.skip('3/5 - It must be possible to search for a treatment by patient.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisby = await frisbyGetFunction(base_url, 'treatment/patient/2');
+
+      expect(frisby._response.status).toEqual(200);
+      expect(frisby._json).toEqual({ ...new_treatment2, id: 2 });
+    });
+
+    it.skip('4/5 - It should not be possible to search for a treatment by non-existent id.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisby = await frisbyGetFunction(base_url, 'treatment/3');
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to find treatment with non-existent ID.',
+      });
+    });
+
+    it.skip('5/5 - It should not be possible to search for a treatment by non-existent patient.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisby = await frisbyGetFunction(base_url, 'treatment/patient/3');
+
+      expect(frisby._response.status).toEqual(400);
+      expect(frisby._json).toEqual({
+        message: 'Error trying to find treatment with non-existent patient.',
       });
     });
   });
