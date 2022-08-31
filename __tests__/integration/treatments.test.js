@@ -4,6 +4,7 @@ const {
   frisbyPostFunction,
   frisbyPutFunction,
   frisbyGetFunction,
+  frisbyDeleteFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
@@ -232,6 +233,43 @@ describe('# Treatment tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: 'Error trying to find treatment with non-existent patient.',
+      });
+    });
+  });
+
+  describe('Delete treatments.', () => {
+    beforeEach(() => {
+      shell.exec('cd ./backend && yarn sequelize-cli db:drop');
+      shell.exec(
+        'cd ./backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
+      );
+    });
+
+    it.skip('1/2 - It should be possible to delete a treatment by their ID.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+      await frisbyPostFunction(base_url, 'treatment', new_treatment2);
+
+      const frisbyDelete = await frisbyDeleteFunction(base_url, 'treatment/1');
+
+      expect(frisbyDelete._response.status).toEqual(200);
+      expect(frisbyDelete._json).toEqual({
+        message: 'ID handling: 1 deleted successfully.',
+      });
+
+      const frisbyGetAll = await frisbyGetFunction(base_url, 'treatment');
+
+      expect(frisbyGetAll._response.status).toEqual(200);
+      expect(frisbyGetAll._json[0].patientID).toBe(new_treatment2.patientID);
+    });
+
+    it.skip('2/2 - It should not be possible to delete a treatment with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'treatment', new_treatment);
+
+      const frisbyDelete = await frisbyDeleteFunction(base_url, 'treatment/2');
+
+      expect(frisbyDelete._response.status).toEqual(404);
+      expect(frisbyDelete._json).toEqual({
+        message: 'Error when trying to delete treatment with non-existent ID.',
       });
     });
   });

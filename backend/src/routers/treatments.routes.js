@@ -4,6 +4,7 @@ const {
   getTreatmentsController,
   getTreatmentByIDController,
   getTreatmentByPatientController,
+  deleteTreatmentController,
 } = require('../database/controllers/treatments.controller');
 
 const treatmentRoutes = require('express').Router();
@@ -20,5 +21,7 @@ treatmentRoutes.get(
   '/treatment/patient/:patientid',
   getTreatmentByPatientController
 );
+
+treatmentRoutes.delete('/treatment/:id', deleteTreatmentController);
 
 module.exports = treatmentRoutes;

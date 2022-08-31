@@ -3,7 +3,11 @@ const {
 } = require('../../utils/errorMessageConstructor');
 const { treatmentSchema, treatmentUpdateSchema } = require('../schemas');
 const { treatments } = require('../models/index');
-const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
+const {
+  BAD_REQUEST,
+  OK,
+  NOT_FOUND,
+} = require('../../utils/statusCodesConstructor');
 
 const addTreatmentServer = async (body) => {
   const { error } = treatmentSchema.validate(body);
@@ -95,10 +99,26 @@ const getTreatmentByPatientService = async (patientID) => {
     : treatmentByPatient;
 };
 
+const deleteTreatmentService = async (id) => {
+  const deleted = await treatments.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return deleted < 1
+    ? errorMessageConstructor(
+        NOT_FOUND,
+        'Error when trying to delete treatment with non-existent ID.'
+      )
+    : errorMessageConstructor(OK, `ID handling: ${id} deleted successfully.`);
+};
+
 module.exports = {
   addTreatmentServer,
   updateTreatmentService,
   getTreatmentsService,
   getTreatmentByIDService,
   getTreatmentByPatientService,
+  deleteTreatmentService,
 };
