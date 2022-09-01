@@ -1,22 +1,32 @@
-import Input from './components/Input';
+import Button from '../../components/button/Button';
+import Input from './LoginComponents/Input';
+
+import './login.css';
 
 export default function Login() {
   return (
-    <div className='Login'>
+    <div className='login-div'>
       <fieldset>
-        <h1 className='title'>Login</h1>
+        <h1 className='login-title'>Login</h1>
         <Input
-          className='inputEmail'
+          className='login-inputEmail'
           value=''
           id='login_input-email'
           type='email'
         />
 
         <Input
-          className='inputPassword'
+          className='login-inputPassword'
           value=''
           id='login_input-password'
           type='password'
+        />
+
+        <Button
+          text='Login'
+          className='login-button'
+          type='button'
+          id='login_button-login'
         />
       </fieldset>
     </div>
