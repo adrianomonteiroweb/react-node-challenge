@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
+    "build": "node .",
     "dev": "nodemon server.js"
   },
   "dependencies": {
