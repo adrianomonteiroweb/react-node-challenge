@@ -1,0 +1,42 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 412px) {
+}
+
+@media (max-width: 393px) {
+}
+
+@media (max-width: 360px) {
+  fieldset {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  fieldset h1 {
+    color: #ef496c;
+  }
+
+  fieldset .login-inputEmail,
+  .login-inputPassword {
+    background-color: #ffffff;
+    border-radius: 6%;
+    height: 30px;
+    margin: 5px;
+  }
+
+  fieldset button {
+    color: white;
+    background-color: #ef496c;
+    border-radius: 6%;
+    font-size: 15px;
+    height: 30px;
+    margin: 5px;
+    width: 180px;
+  }
+}
