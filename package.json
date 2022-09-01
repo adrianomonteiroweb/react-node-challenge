@@ -7,7 +7,10 @@
   "author": "Adriano monteiro <adrianomonteiroweb@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "pm2-runtime start pm2.backend.config.yml",
+    "pm2": "./node_modules/.bin/pm2",
+    "build": "yarn workspaces foreach run build",
+    "start": "yarn workspaces server start",
+    "stop": "(pm2 stop all && pm2 delete all) | grep 'PM2'",
     "test": "jest --runInBand --detectOpenHandles --forceExit --verbose",
     "test:dev": "DEV=true npm run jest -- --runInBand --detectOpenHandles --forceExit --verbose"
   },
