@@ -5297,7 +5297,7 @@ __metadata:
     boolbase: ^1.0.0
     css-what: ^3.2.1
     domutils: ^1.7.0
-    nth-check: ^1.0.2
+    nth-check: ^2.0.1
   checksum: 0c4099910f2411e2a9103cf92ea6a4ad738b57da75bcf73d39ef2c14a00ef36e5f16cb863211c901320618b24ace74da6333442d82995cafd5040077307de462
   languageName: node
   linkType: hard
