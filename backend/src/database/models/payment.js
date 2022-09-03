@@ -16,7 +16,7 @@ const payments = (sequelize, DataTypes) => {
   );
 
   payment.associate = (models) => {
-    payment.belongsTo(models.patients, {
+    payment.belongsTo(models.users, {
       foreignKey: 'patientID',
       as: 'patient',
     }),

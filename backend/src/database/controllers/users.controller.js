@@ -1,25 +1,25 @@
 const { CREATED, OK } = require('../../utils/statusCodesConstructor');
 const { tryQueryServer } = require('../../utils/tryServer');
 const {
-  addPatientService,
-  updatePatientService,
-  getPatientsService,
-  getPatientByIDService,
-  getPatientByEmailService,
-  deletePatientService,
-} = require('../services/patientes.service');
+  addUserService,
+  updateUserService,
+  getUsersService,
+  getUserByIDService,
+  getUserByEmailService,
+  deleteUserService,
+} = require('../services/users.service');
 
-const addPatientController = async (req, res, next) => {
-  const result = await tryQueryServer(addPatientService, [req.body], next);
+const addUserController = async (req, res, next) => {
+  const result = await tryQueryServer(addUserService, [req.body], next);
 
   return result.status
     ? res.status(result.status).json({ message: result.message })
     : res.status(CREATED).json(result);
 };
 
-const updatePatientController = async (req, res, next) => {
+const updateUserController = async (req, res, next) => {
   const result = await tryQueryServer(
-    updatePatientService,
+    updateUserService,
     [req.params.id, req.body],
     next
   );
@@ -29,17 +29,17 @@ const updatePatientController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
-const getPatientsController = async (_req, res, next) => {
-  const result = await tryQueryServer(getPatientsService, [], next);
+const getUsersController = async (_req, res, next) => {
+  const result = await tryQueryServer(getUsersService, [], next);
 
   return result.status
     ? res.status(result.status).json({ message: result.message })
     : res.status(OK).json(result);
 };
 
-const getPatientByIDController = async (req, res, next) => {
+const getUserByIDController = async (req, res, next) => {
   const result = await tryQueryServer(
-    getPatientByIDService,
+    getUserByIDService,
     [req.params.id],
     next
   );
@@ -49,9 +49,9 @@ const getPatientByIDController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
-const getPatientByEmailController = async (req, res, next) => {
+const getUserByEmailController = async (req, res, next) => {
   const result = await tryQueryServer(
-    getPatientByEmailService,
+    getUserByEmailService,
     [req.body.email],
     next
   );
@@ -61,12 +61,8 @@ const getPatientByEmailController = async (req, res, next) => {
     : res.status(OK).json(result);
 };
 
-const deletePatientController = async (req, res, next) => {
-  const result = await tryQueryServer(
-    deletePatientService,
-    [req.params.id],
-    next
-  );
+const deleteUserController = async (req, res, next) => {
+  const result = await tryQueryServer(deleteUserService, [req.params.id], next);
 
   return result.status
     ? res.status(result.status).json({ message: result.message })
@@ -74,10 +70,10 @@ const deletePatientController = async (req, res, next) => {
 };
 
 module.exports = {
-  addPatientController,
-  updatePatientController,
-  getPatientsController,
-  getPatientByIDController,
-  getPatientByEmailController,
-  deletePatientController,
+  addUserController,
+  updateUserController,
+  getUsersController,
+  getUserByIDController,
+  getUserByEmailController,
+  deleteUserController,
 };

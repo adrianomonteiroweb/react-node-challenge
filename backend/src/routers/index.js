@@ -1,7 +1,7 @@
-const patientRoutes = require('./patients.routes');
+const userRoutes = require('./users.routes');
 const paymentRoutes = require('./payments.routes');
 const treatmentRoutes = require('./treatments.routes');
 
-const routes = [patientRoutes, treatmentRoutes, paymentRoutes];
+const routes = [userRoutes, treatmentRoutes, paymentRoutes];
 
 module.exports = routes;

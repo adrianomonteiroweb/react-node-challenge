@@ -1,6 +1,7 @@
 const app = require('./app');
+const path = require('path');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 
 const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || 'localhost';

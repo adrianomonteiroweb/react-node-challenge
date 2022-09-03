@@ -17,7 +17,7 @@ const treatments = (sequelize, DataTypes) => {
   );
 
   treatment.associate = (models) => {
-    treatment.belongsTo(models.patients, {
+    treatment.belongsTo(models.users, {
       foreignKey: 'patientID',
       as: 'patient',
     });

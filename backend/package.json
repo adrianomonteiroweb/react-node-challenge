@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
-    "build": "node .",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "db:create": "yarn sequelize-cli db:create",
+    "db:migrate": "yarn sequelize-cli db:migrate",
+    "db:drop": "yarn sequelize-cli db:drop"
   },
   "dependencies": {
     "cors": "^2.8.5",
