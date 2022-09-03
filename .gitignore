@@ -75,6 +75,9 @@ typings/
 .env
 .env.test
 
+#jwt
+jwt.evaluation.key
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
