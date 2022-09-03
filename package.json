@@ -8,6 +8,12 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn workspaces foreach run start & sleep 5 && yarn workspace frontend start",
+    "start:server": "yarn workspace backend start",
+    "start:server-dev": "yarn workspace backend dev",
+    "start:client": "yarn workspace frontend start",
+    "db:create": "yarn workspace backend db:create",
+    "db:migrate": "yarn workspace backend db:migrate",
+    "db:drop": "yarn workspace backend db:drop",
     "test": "jest --runInBand --detectOpenHandles --forceExit --verbose",
     "test:dev": "DEV=true npm run jest -- --runInBand --detectOpenHandles --forceExit --verbose"
   },

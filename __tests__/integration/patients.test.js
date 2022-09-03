@@ -119,14 +119,14 @@ describe('# Patients tests.', () => {
       );
     });
 
-    it('1/7 - It should be possible to add a new patient user.', async () => {
-      // const frisby = await frisbyPostFunction(
-      //   base_url,
-      //   'user',
-      //   patient_created
-      // );
-      // expect(frisby._response.status).toEqual(201);
-      // expect(frisby._json).toEqual(patient_created);
+    it.skip('1/7 - It should be possible to add a new patient user.', async () => {
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'user',
+        patient_created
+      );
+      expect(frisby._response.status).toEqual(201);
+      expect(frisby._json).toEqual(patient_created);
     });
 
     it.skip('2/7 - It should not be possible to register a patient without the email.', async () => {
