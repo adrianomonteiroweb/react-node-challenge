@@ -1,6 +1,6 @@
-const patients = (sequelize, DataTypes) => {
-  const patient = sequelize.define(
-    'patients',
+const users = (sequelize, DataTypes) => {
+  const user = sequelize.define(
+    'users',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -10,13 +10,14 @@ const patients = (sequelize, DataTypes) => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
+      password_hash: DataTypes.STRING,
       number: DataTypes.STRING,
-      describe: DataTypes.STRING,
+      role: DataTypes.STRING,
     },
     { timestamps: false }
   );
 
-  return patient;
+  return user;
 };
 
-module.exports = patients;
+module.exports = users;
