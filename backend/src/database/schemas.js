@@ -11,6 +11,13 @@ exports.userSchema = Joi.object({
   role: Joi.string().required(),
 });
 
+exports.loginSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  password_hash: Joi.string().min(8).required(),
+});
+
 exports.treatmentSchema = Joi.object({
   patientID: Joi.number().required(),
   startDate: Joi.date().required(),
