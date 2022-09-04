@@ -1,4 +1,5 @@
 const shell = require('shelljs');
+const { tokenCheck } = require('../../backend/src/middlewares/auth');
 
 const {
   frisbyPostFunction,
@@ -130,7 +131,7 @@ const login_with_invalid_email = {
 
 const login_with_invalid_password = {
   email: 'georgia@email.com',
-  password_hash: 'abcdefge',
+  password_hash: 'abcdefg',
 };
 
 describe('# admins tests.', () => {
@@ -378,42 +379,63 @@ describe('# admins tests.', () => {
   });
 
   describe('Login admins.', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
-
-      await frisbyPostFunction(base_url, 'user', admin_created2);
     });
 
-    it.skip('1/5 - You should be able to log in as an administrator.', async () => {
-      await frisbyPostFunction(base_url, 'login', login);
+    it.skip('1/5 - It must be able to log in and receive a valid token.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPostFunction(base_url, 'login', login);
 
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual({
-        message: 'Login efetuado com sucesso.',
-      });
+      expect(frisby._json).toHaveProperty('token');
+
+      const token = frisby._json.token;
+      const resultToken = tokenCheck(token);
+
+      expect(resultToken.user).toEqual(login.email);
     });
 
     it.skip('2/5 - It should not be possible to log in without informing the email.', async () => {
-      await frisbyPostFunction(base_url, 'login', login_without_email);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_without_email
+      );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"email" is required.',
+        message: '"email" is required',
       });
     });
 
     it.skip('3/5 - It should not be possible to log in without informing the password.', async () => {
-      await frisbyPostFunction(base_url, 'login', login_without_password);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_without_password
+      );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"password_hash" is required.',
+        message: '"password_hash" is required',
       });
     });
 
     it.skip('4/5 - It should not be possible to log in with invalid email.', async () => {
-      await frisbyPostFunction(base_url, 'login', login_with_invalid_email);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_with_invalid_email
+      );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
@@ -422,11 +444,17 @@ describe('# admins tests.', () => {
     });
 
     it.skip('5/5 - It should not be possible to log in with invalid password.', async () => {
-      await frisbyPostFunction(base_url, 'login', login_with_invalid_password);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_with_invalid_password
+      );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"email" must be a valid email',
+        message: '"password_hash" must be a valid email',
       });
     });
   });

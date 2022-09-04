@@ -2,22 +2,31 @@ const { tokenGenerate } = require('../../middlewares/auth');
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
-const { BAD_REQUEST } = require('../../utils/statusCodesConstructor');
+const {
+  BAD_REQUEST,
+  UNAUTHORIZED,
+} = require('../../utils/statusCodesConstructor');
 const { users } = require('../models/index');
-const { userSchema } = require('../schemas');
+const { loginSchema } = require('../schemas');
 
 const loginUserService = async (body) => {
-  const { error } = userSchema.validate(body);
+  const { error } = loginSchema.validate(body);
 
-  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
+  if (error)
+    return errorMessageConstructor(
+      BAD_REQUEST,
+      '"password_hash" must be a valid email'
+    );
 
   const { email, password_hash } = body;
 
-  const { id } = await users.findOne({
+  const search = await users.findOne({
     where: { email, password_hash },
   });
 
-  const token = tokenGenerate(email, role, id);
+  const token = search
+    ? tokenGenerate(email, search.role, search.id)
+    : errorMessageConstructor(UNAUTHORIZED, 'Erro ao tentar realizar login.');
 
   return token;
 };
