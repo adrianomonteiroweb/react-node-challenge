@@ -15,7 +15,9 @@ exports.loginSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
-  password_hash: Joi.string().min(8).required(),
+  password_hash: Joi.string()
+    .pattern(new RegExp('^[a-zA-Z0-9]{8,30}$'))
+    .required(),
 });
 
 exports.treatmentSchema = Joi.object({

@@ -1,5 +1,9 @@
+const {
+  loginUserController,
+} = require('../database/controllers/login.controller');
+
 const loginRoutes = require('express').Router();
 
-loginRoutes.post('/user', loginUserController);
+loginRoutes.post('/login', loginUserController);
 
 module.exports = loginRoutes;

@@ -29,3 +29,9 @@ exports.tokenValidation = (req, _res, next) => {
     next(error);
   }
 };
+
+exports.tokenCheck = (token) => {
+  const tokenResult = jwt.verify(token, secret);
+
+  return tokenResult;
+};
