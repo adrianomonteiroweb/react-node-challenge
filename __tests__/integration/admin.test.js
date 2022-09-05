@@ -255,18 +255,36 @@ describe('# admins tests.', () => {
     });
 
     it.skip('1/2 - It should be possible to update a admin successfully.', async () => {
+      const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
+
+      const token = frisbyLogin._json.token;
+
       await frisbyPostFunction(base_url, 'user', admin_created);
 
-      const frisby = await frisbyPutFunction(base_url, 'user/1', admin_updated);
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'user/1',
+        admin_updated,
+        token
+      );
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual([1]);
     });
 
     it.skip('2/2 - It should not be possible to update a admin with a non-existent ID.', async () => {
+      const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
+
+      const token = frisbyLogin._json.token;
+
       await frisbyPostFunction(base_url, 'user', admin_created);
 
-      const frisby = await frisbyPutFunction(base_url, 'user/2', admin_updated);
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'user/2',
+        admin_updated,
+        token
+      );
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
