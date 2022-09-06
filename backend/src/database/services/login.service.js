@@ -12,11 +12,7 @@ const { loginSchema } = require('../schemas');
 const loginUserService = async (body) => {
   const { error } = loginSchema.validate(body);
 
-  if (error)
-    return errorMessageConstructor(
-      BAD_REQUEST,
-      '"password_hash" must be a valid email'
-    );
+  if (error) return errorMessageConstructor(BAD_REQUEST, error.message);
 
   const { email, password_hash } = body;
 

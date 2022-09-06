@@ -139,6 +139,8 @@ const login_with_invalid_password = {
   password_hash: 'abcdefg',
 };
 
+const password_pattern = /^[a-zA-Z0-9]{8,30}$/;
+
 describe('# admins tests.', () => {
   describe('Creating admins - Testing required fields.', () => {
     beforeEach(() => {
@@ -146,14 +148,18 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/7 - It should be possible to add a new admin user.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/7 - It should be possible to add a new admin user.', async () => {
       const frisby = await frisbyPostFunction(base_url, 'user', admin_created);
 
       expect(frisby._response.status).toEqual(201);
       expect(frisby._json).toEqual(admin_created);
     });
 
-    it.skip('2/7 - It should not be possible to register a admin without the email.', async () => {
+    it('2/7 - It should not be possible to register a admin without the email.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -164,7 +170,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ message: '"email" is required' });
     });
 
-    it.skip('3/7 - It should not be possible to register a admin without the password.', async () => {
+    it('3/7 - It should not be possible to register a admin without the password.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -175,7 +181,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ message: '"password_hash" is required' });
     });
 
-    it.skip('4/7 - It should not be possible to register a admin without the number.', async () => {
+    it('4/7 - It should not be possible to register a admin without the number.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -186,7 +192,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ message: '"number" is required' });
     });
 
-    it.skip('5/7 - It should not be possible to register a admin without the firstName.', async () => {
+    it('5/7 - It should not be possible to register a admin without the firstName.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -197,7 +203,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ message: '"firstName" is required' });
     });
 
-    it.skip('6/7 - It should not be possible to register a admin without the lastName.', async () => {
+    it('6/7 - It should not be possible to register a admin without the lastName.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -208,7 +214,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ message: '"lastName" is required' });
     });
 
-    it.skip('7/7 - It should not be possible to register a admin without the role.', async () => {
+    it('7/7 - It should not be possible to register a admin without the role.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -226,7 +232,11 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/2 - It should not be possible to register a admin with the wrong email address.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/2 - It should not be possible to register a admin with the wrong email address.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -239,7 +249,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('2/2 - It should not be possible to register a admin with the wrong number.', async () => {
+    it('2/2 - It should not be possible to register a admin with the wrong number.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -259,7 +269,11 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/4 - It should be possible to update a admin successfully.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/4 - It should be possible to update a admin successfully.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
@@ -277,7 +291,7 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual([1]);
     });
 
-    it.skip('2/4 - It should not be possible to update a admin with a non-existent ID.', async () => {
+    it('2/4 - It should not be possible to update a admin with a non-existent ID.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
@@ -297,7 +311,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('3/4 - It should not be possible to update a user without a token.', async () => {
+    it('3/4 - It should not be possible to update a user without a token.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPutFunction(base_url, 'user/1', admin_updated);
@@ -308,7 +322,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('4/4 - It should not be possible to update a user without a "admin" role.', async () => {
+    it('4/4 - It should not be possible to update a user without a "admin" role.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -340,7 +354,11 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/5 - It must be possible to search for all admins.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/5 - It must be possible to search for all admins.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -353,7 +371,7 @@ describe('# admins tests.', () => {
       ]);
     });
 
-    it.skip('2/5 - It must be possible to search for a admin by ID..', async () => {
+    it('2/5 - It must be possible to search for a admin by ID..', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -363,11 +381,11 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ ...admin_created2, id: 2 });
     });
 
-    it.skip('3/5 - It must be possible to search for a admin by email.', async () => {
+    it('3/5 - It must be possible to search for a admin by email.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
-      const frisby = await frisbyPostFunction(base_url, 'admin/email', {
+      const frisby = await frisbyPostFunction(base_url, 'user/email', {
         email: admin_created2.email,
       });
 
@@ -375,29 +393,29 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual({ ...admin_created2, id: 2 });
     });
 
-    it.skip('4/5 - It should not be possible to search for a admin by non-existent id.', async () => {
+    it('4/5 - It should not be possible to search for a admin by non-existent id.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
-      const frisby = await frisbyGetFunction(base_url, 'admin/3');
+      const frisby = await frisbyGetFunction(base_url, 'user/3');
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: 'Error trying to find admin with non-existent ID.',
+        message: 'Error trying to find user with non-existent ID.',
       });
     });
 
-    it.skip('5/5 - It should not be possible to search for a admin by non-existent email.', async () => {
+    it('5/5 - It should not be possible to search for a admin by non-existent email.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
-      const frisby = await frisbyPostFunction(base_url, 'admin/email', {
+      const frisby = await frisbyPostFunction(base_url, 'user/email', {
         email: 'bruno@email.com',
       });
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: 'Error trying to find admin with non-existent email.',
+        message: 'Error trying to find user with non-existent email.',
       });
     });
   });
@@ -408,7 +426,11 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/4 - It should be possible to delete a admin by their ID.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/4 - It should be possible to delete a admin by their ID.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -429,7 +451,7 @@ describe('# admins tests.', () => {
       expect(frisbyGetAll._json).toHaveLength(1);
     });
 
-    it.skip('2/4 - It should not be possible to delete a admin with a non-existent ID.', async () => {
+    it('2/4 - It should not be possible to delete a admin with a non-existent ID.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
@@ -444,7 +466,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('3/4 - It should not be possible to delete a admin without a token.', async () => {
+    it('3/4 - It should not be possible to delete a admin without a token.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -461,7 +483,7 @@ describe('# admins tests.', () => {
       expect(frisbyGetAll._json).toHaveLength(2);
     });
 
-    it.skip('4/4 - It should not be possible to delete a admin without a "admin" role.', async () => {
+    it('4/4 - It should not be possible to delete a admin without a "admin" role.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
@@ -493,7 +515,11 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/5 - It must be able to log in and receive a valid token.', async () => {
+    afterEach(() => {
+      shell.exec('yarn db:drop');
+    });
+
+    it('1/5 - It must be able to log in and receive a valid token.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPostFunction(base_url, 'login', login);
@@ -504,10 +530,10 @@ describe('# admins tests.', () => {
       const token = frisby._json.token;
       const resultToken = tokenCheck(token);
 
-      expect(resultToken.user).toEqual(login.email);
+      expect(resultToken.user.email).toEqual(login.email);
     });
 
-    it.skip('2/5 - It should not be possible to log in without informing the email.', async () => {
+    it('2/5 - It should not be possible to log in without informing the email.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPostFunction(
@@ -522,7 +548,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('3/5 - It should not be possible to log in without informing the password.', async () => {
+    it('3/5 - It should not be possible to log in without informing the password.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPostFunction(
@@ -537,7 +563,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('4/5 - It should not be possible to log in with invalid email.', async () => {
+    it('4/5 - It should not be possible to log in with invalid email.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPostFunction(
@@ -552,7 +578,7 @@ describe('# admins tests.', () => {
       });
     });
 
-    it.skip('5/5 - It should not be possible to log in with invalid password.', async () => {
+    it('5/5 - It should not be possible to log in with invalid password.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
       const frisby = await frisbyPostFunction(
@@ -563,7 +589,7 @@ describe('# admins tests.', () => {
 
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
-        message: '"password_hash" must be a valid email',
+        message: `"password_hash" with value "${login_with_invalid_password.password_hash}" fails to match the required pattern: ${password_pattern}`,
       });
     });
   });
