@@ -33,8 +33,6 @@ exports.tokenValidation = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('ERROR: ', error.message);
-
     res.status(UNAUTHORIZED).json({
       message: 'Você não tem autorização para realizar essa atualização.',
     });
