@@ -24,8 +24,14 @@ const loginUserService = async (body) => {
     where: { email, password_hash },
   });
 
+  const user = {
+    email,
+  };
+  user['role'] = search.dataValues.role;
+  user['id'] = search.dataValues.id;
+
   const token = search
-    ? tokenGenerate(email, search.role, search.id)
+    ? tokenGenerate(user)
     : errorMessageConstructor(UNAUTHORIZED, 'Erro ao tentar realizar login.');
 
   return token;

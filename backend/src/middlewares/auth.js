@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const { UNAUTHORIZED } = require('../utils/statusCodesConstructor');
 
 const secret = fs.readFileSync(
   path.resolve(__dirname, '../../../jwt.evaluation.key'),
@@ -16,16 +17,28 @@ exports.tokenGenerate = (user) => {
   return generatedToken;
 };
 
-exports.tokenValidation = (req, _res, next) => {
+exports.tokenValidation = (req, res, next) => {
   try {
     const { authorization } = req.headers;
+
     const { user } = jwt.verify(authorization, secret);
+
+    if (user.role !== 'admin') {
+      throw res.status(UNAUTHORIZED).json({
+        message: 'Você não tem autorização para realizar essa atualização.',
+      });
+    }
 
     req.user = user;
 
     next();
   } catch (error) {
-    console.error(error.message);
+    console.error('ERROR: ', error.message);
+
+    res.status(UNAUTHORIZED).json({
+      message: 'Você não tem autorização para realizar essa atualização.',
+    });
+
     next(error);
   }
 };

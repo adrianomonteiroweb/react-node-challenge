@@ -5,7 +5,7 @@ const {
   frisbyPostFunction,
   frisbyPutFunction,
   frisbyGetFunction,
-  frisbyFunction,
+  frisbyDeleteFunction,
 } = require('../functions/frisbyFunctions');
 
 require('dotenv').config();
@@ -24,7 +24,12 @@ const admin_created = {
   email: 'fernando@email.com',
   password_hash: 'abcdefg1',
   number: '85989876655',
-  role: 'admin',
+  role: 'user',
+};
+
+const login_user_role = {
+  email: 'fernando@email.com',
+  password_hash: 'abcdefg1',
 };
 
 const admin_created2 = {
@@ -254,12 +259,12 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/2 - It should be possible to update a admin successfully.', async () => {
+    it.skip('1/4 - It should be possible to update a admin successfully.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
       const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
 
       const token = frisbyLogin._json.token;
-
-      await frisbyPostFunction(base_url, 'user', admin_created);
 
       const frisby = await frisbyPutFunction(
         base_url,
@@ -272,12 +277,12 @@ describe('# admins tests.', () => {
       expect(frisby._json).toEqual([1]);
     });
 
-    it.skip('2/2 - It should not be possible to update a admin with a non-existent ID.', async () => {
+    it.skip('2/4 - It should not be possible to update a admin with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
       const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
 
       const token = frisbyLogin._json.token;
-
-      await frisbyPostFunction(base_url, 'user', admin_created);
 
       const frisby = await frisbyPutFunction(
         base_url,
@@ -289,6 +294,42 @@ describe('# admins tests.', () => {
       expect(frisby._response.status).toEqual(400);
       expect(frisby._json).toEqual({
         message: 'Error trying to update by wrong ID.',
+      });
+    });
+
+    it.skip('3/4 - It should not be possible to update a user without a token.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyPutFunction(base_url, 'user/1', admin_updated);
+
+      expect(frisby._response.status).toEqual(401);
+      expect(frisby._json).toEqual({
+        message: 'Você não tem autorização para realizar essa atualização.',
+      });
+    });
+
+    it.skip('4/4 - It should not be possible to update a user without a "admin" role.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisbyLogin = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_user_role
+      );
+
+      const token = frisbyLogin._json.token;
+
+      const frisby = await frisbyPutFunction(
+        base_url,
+        'user/1',
+        admin_updated,
+        token
+      );
+
+      expect(frisby._response.status).toEqual(401);
+      expect(frisby._json).toEqual({
+        message: 'Você não tem autorização para realizar essa atualização.',
       });
     });
   });
@@ -367,32 +408,82 @@ describe('# admins tests.', () => {
       shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/2 - It should be possible to delete a admin by their ID.', async () => {
+    it.skip('1/4 - It should be possible to delete a admin by their ID.', async () => {
       await frisbyPostFunction(base_url, 'user', admin_created);
       await frisbyPostFunction(base_url, 'user', admin_created2);
 
-      const frisby = await frisbyFunction(base_url, 'user/1');
+      const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
+
+      const token = frisbyLogin._json.token;
+
+      const frisby = await frisbyDeleteFunction(base_url, 'user/1', token);
 
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual({
-        message: 'Paciente de ID: 1 deletado com sucesso.',
+        message: 'User de ID: 1 deletado com sucesso.',
       });
 
       const frisbyGetAll = await frisbyGetFunction(base_url, 'user');
 
       expect(frisbyGetAll._response.status).toEqual(200);
-      expect(frisbyGetAll._json).toEqual([{ ...admin_created2, id: 2 }]);
+      expect(frisbyGetAll._json).toHaveLength(1);
     });
 
-    it.skip('2/2 - It should not be possible to delete a admin with a non-existent ID.', async () => {
-      await frisbyPostFunction(base_url, 'user', admin_created);
+    it.skip('2/4 - It should not be possible to delete a admin with a non-existent ID.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created2);
 
-      const frisby = await frisbyFunction(base_url, 'user/2');
+      const frisbyLogin = await frisbyPostFunction(base_url, 'login', login);
+
+      const token = frisbyLogin._json.token;
+
+      const frisby = await frisbyDeleteFunction(base_url, 'user/2', token);
 
       expect(frisby._response.status).toEqual(404);
       expect(frisby._json).toEqual({
         message: 'Error ao tentar deletar paciente com ID inexistente.',
       });
+    });
+
+    it.skip('3/4 - It should not be possible to delete a admin without a token.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisby = await frisbyDeleteFunction(base_url, 'user/1');
+
+      expect(frisby._response.status).toEqual(401);
+      expect(frisby._json).toEqual({
+        message: 'Você não tem autorização para realizar essa atualização.',
+      });
+
+      const frisbyGetAll = await frisbyGetFunction(base_url, 'user');
+
+      expect(frisbyGetAll._response.status).toEqual(200);
+      expect(frisbyGetAll._json).toHaveLength(2);
+    });
+
+    it.skip('4/4 - It should not be possible to delete a admin without a "admin" role.', async () => {
+      await frisbyPostFunction(base_url, 'user', admin_created);
+      await frisbyPostFunction(base_url, 'user', admin_created2);
+
+      const frisbyLogin = await frisbyPostFunction(
+        base_url,
+        'login',
+        login_user_role
+      );
+
+      const token = frisbyLogin._json.token;
+
+      const frisby = await frisbyDeleteFunction(base_url, 'user/1', token);
+
+      expect(frisby._response.status).toEqual(401);
+      expect(frisby._json).toEqual({
+        message: 'Você não tem autorização para realizar essa atualização.',
+      });
+
+      const frisbyGetAll = await frisbyGetFunction(base_url, 'user');
+
+      expect(frisbyGetAll._response.status).toEqual(200);
+      expect(frisbyGetAll._json).toHaveLength(2);
     });
   });
 
