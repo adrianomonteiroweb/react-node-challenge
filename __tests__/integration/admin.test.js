@@ -142,7 +142,7 @@ const login_with_invalid_password = {
 const password_pattern = /^[a-zA-Z0-9]{8,30}$/;
 
 describe('# admins tests.', () => {
-  describe('Creating admins - Testing required fields.', () => {
+  describe.skip('Creating admins - Testing required fields.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -150,6 +150,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/7 - It should be possible to add a new admin user.', async () => {
@@ -226,7 +227,7 @@ describe('# admins tests.', () => {
     });
   });
 
-  describe('Creating admins - Testing field formats.', () => {
+  describe.skip('Creating admins - Testing field formats.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -234,6 +235,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/2 - It should not be possible to register a admin with the wrong email address.', async () => {
@@ -263,7 +265,7 @@ describe('# admins tests.', () => {
     });
   });
 
-  describe('Updating admins.', () => {
+  describe.skip('Updating admins.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -271,6 +273,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/4 - It should be possible to update a admin successfully.', async () => {
@@ -348,7 +351,7 @@ describe('# admins tests.', () => {
     });
   });
 
-  describe('Gettings admins.', () => {
+  describe.skip('Gettings admins.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -356,6 +359,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/5 - It must be possible to search for all admins.', async () => {
@@ -420,7 +424,7 @@ describe('# admins tests.', () => {
     });
   });
 
-  describe('Delete admins.', () => {
+  describe.skip('Delete admins.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -428,6 +432,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/4 - It should be possible to delete a admin by their ID.', async () => {
@@ -509,7 +514,7 @@ describe('# admins tests.', () => {
     });
   });
 
-  describe('Login admins.', () => {
+  describe.skip('Login admins.', () => {
     beforeEach(() => {
       shell.exec('yarn db:drop');
       shell.exec('yarn db:create && yarn db:migrate');
@@ -517,6 +522,7 @@ describe('# admins tests.', () => {
 
     afterEach(() => {
       shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
     it('1/5 - It must be able to log in and receive a valid token.', async () => {
