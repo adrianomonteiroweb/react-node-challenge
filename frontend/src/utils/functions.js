@@ -1,3 +1,7 @@
+import axios from 'axios';
+import jwt from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
+
 export const enableLoginButton = (
   emailValidation,
   passwordValidation,
@@ -28,4 +32,25 @@ export const passwordValidation = (password) => {
 
 export const redirectFunction = (history, alias) => {
   history.push(alias);
+};
+
+const base_url = 'http://localhost:3001';
+
+export const tryToLogin = async (email, password) => {
+  try {
+    const response = await axios.post(`${base_url}/login`, {
+      email,
+      password_hash: password,
+    });
+
+    return response;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export const tokenDecode = (token) => {
+  const tokenResult = jwt(token);
+
+  return tokenResult;
 };

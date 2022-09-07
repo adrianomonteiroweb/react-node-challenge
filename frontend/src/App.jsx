@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import Login from './pages/login/Login';
+import Register from './pages/register/Register';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Navigate replace to='/login' />} />
         <Route exact path='/login' element={<Login />} />
+        <Route exact path='/register' element={<Register />} />
       </Routes>
     </Router>
   );
