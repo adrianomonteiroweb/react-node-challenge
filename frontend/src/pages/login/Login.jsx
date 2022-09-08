@@ -13,7 +13,7 @@ import {
 
 import Input from '../../components/inputs/Input';
 import Button from '../../components/buttons/Button';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 export default function Login() {
   const [loginBlocking, setLoginBlocking] = useState(true);
@@ -47,7 +47,7 @@ export default function Login() {
     <div className='login-div'>
       {statusNavigate && <Navigate replace to='/dashboard' />}
       <fieldset>
-        <h1 className='login-title'>Login</h1>
+        <h1 className='login-title'>MyPatients</h1>
         <Input
           className='login-inputEmail'
           value={emailValue}
@@ -72,6 +72,9 @@ export default function Login() {
           disabled={loginBlocking}
           onClick={checkPermissionOnThisPage}
         />
+        <Link className='register-link' to='/register'>
+          Registre-se
+        </Link>
         {!errorMessage ? '' : <p className='error-message'>{errorMessage}</p>}
       </fieldset>
     </div>

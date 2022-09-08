@@ -30,6 +30,7 @@
     height: 40px;
     width: 250px;
     margin: 10px;
+    text-align: center;
   }
 
   fieldset .login-error {
@@ -44,6 +45,20 @@
     height: 50px;
     margin: 5px;
     width: 250px;
+  }
+
+  fieldset .register-link {
+    align-items: center;
+    background-color: rgb(56, 54, 54);
+    border-radius: 6%;
+    display: flex;
+    color: white;
+    font-size: 25px;
+    justify-content: center;
+    height: 50px;
+    margin: 5px;
+    width: 250px;
+    text-decoration: none;
   }
 
   fieldset .error-message {
