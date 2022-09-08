@@ -22,7 +22,7 @@ const addUserService = async (body) => {
     email,
     password_hash,
     number,
-    role,
+    role: role || 'user',
   });
 
   return {
