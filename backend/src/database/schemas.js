@@ -8,7 +8,7 @@ exports.userSchema = Joi.object({
     .required(),
   password_hash: Joi.string().min(8).required(),
   number: Joi.string().min(11).required(),
-  role: Joi.string().required(),
+  role: Joi.string(),
 });
 
 exports.loginSchema = Joi.object({
