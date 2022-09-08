@@ -49,4 +49,21 @@
   fieldset .login-error {
     border: 2px solid #ef496c;
   }
+
+  fieldset .infos-register {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5px;
+  }
+
+  .infos-register p {
+    font-size: 18px;
+  }
+
+  .infos-register .back {
+    font-size: 18px;
+    text-decoration: none;
+  }
 }
