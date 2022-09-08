@@ -1,6 +1,5 @@
 import axios from 'axios';
 import jwt from 'jwt-decode';
-import { Navigate } from 'react-router-dom';
 
 export const enableLoginButton = (
   emailValidation,
@@ -42,6 +41,16 @@ export const tryToLogin = async (email, password) => {
       email,
       password_hash: password,
     });
+
+    return response;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export const tryGetAllData = async (alias) => {
+  try {
+    const response = await axios.get(`${base_url}/${alias}`);
 
     return response;
   } catch (error) {
