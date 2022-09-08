@@ -58,6 +58,16 @@ export const tryGetAllData = async (alias) => {
   }
 };
 
+export const tryRegisterPatient = async (patient, alias) => {
+  try {
+    const response = await axios.post(`${base_url}/${alias}`, patient);
+
+    return response;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 export const tokenDecode = (token) => {
   const tokenResult = jwt(token);
 
