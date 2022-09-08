@@ -3,11 +3,13 @@ import Button from '../../components/buttons/Button';
 
 import Input from '../../components/inputs/Input';
 
+import './register.css';
+
 export default function Register() {
   return (
     <div className='cadastro-div'>
       <fieldset>
-        <h1 className='cadastro-title'>cadastro</h1>
+        <h1 className='cadastro-title'>Register</h1>
         <Input
           className='cadastro-inputFirstName'
           value=''
@@ -36,13 +38,6 @@ export default function Register() {
           type='password'
         />
 
-        <Input
-          className='cadastro-inputNumber'
-          value=''
-          id='cadastro_input-number'
-          type='text'
-        />
-
         <PhoneInput
           country={'br'}
           className='cadastro-inputNumber'
@@ -52,7 +47,7 @@ export default function Register() {
         />
 
         <Button
-          text='Cadastrar'
+          text='Register'
           className='cadastro-button'
           type='button'
           id='cadastro_button-cadastro'

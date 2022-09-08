@@ -1,0 +1,52 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 412px) {
+}
+
+@media (max-width: 393px) {
+}
+
+@media (max-width: 360px) {
+  fieldset {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  fieldset .cadastro-title {
+    color: #ef496c;
+  }
+
+  fieldset .cadastro-inputFirstName,
+  .cadastro-inputLastName,
+  .cadastro-inputEmail,
+  .cadastro-inputPassword {
+    background-color: #ffffff;
+    border-radius: 6%;
+    color: black;
+    height: 40px;
+    width: 250px;
+    margin: 10px;
+    text-align: center;
+  }
+
+  fieldset .cadastro-inputNumber {
+    background-color: #ffffff;
+    border-radius: 6%;
+    color: black;
+    font-size: 18px;
+    height: 50px;
+    margin: 10px;
+    text-align: center;
+    width: 250px;
+  }
+
+  fieldset .login-error {
+    border: 2px solid #ef496c;
+  }
+}
