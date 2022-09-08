@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 import './login.css';
-import history from '../../utils/history';
+
 import {
   emailValidation,
   enableLoginButton,
@@ -13,12 +13,14 @@ import {
 
 import Input from '../../components/inputs/Input';
 import Button from '../../components/buttons/Button';
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
   const [loginBlocking, setLoginBlocking] = useState(true);
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [statusNavigate, setStatusNavigate] = useState(false);
 
   async function checkPermissionOnThisPage() {
     const userLogin = await tryToLogin(emailValue, passwordValue);
@@ -29,7 +31,7 @@ export default function Login() {
       const token = tokenDecode(userLogin.data.token);
       localStorage.user = JSON.stringify(userLogin.data);
 
-      if (token.user.role === 'admin') history.push('/dashboard');
+      if (token.user.role === 'admin') setStatusNavigate(true);
     }
   }
 
@@ -43,6 +45,7 @@ export default function Login() {
 
   return (
     <div className='login-div'>
+      {statusNavigate && <Navigate replace to='/dashboard' />}
       <fieldset>
         <h1 className='login-title'>Login</h1>
         <Input
