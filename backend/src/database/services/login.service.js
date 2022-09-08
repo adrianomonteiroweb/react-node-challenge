@@ -23,8 +23,11 @@ const loginUserService = async (body) => {
   const user = {
     email,
   };
-  user['role'] = search.dataValues.role;
-  user['id'] = search.dataValues.id;
+
+  if (search) {
+    user['role'] = search.dataValues.role;
+    user['id'] = search.dataValues.id;
+  }
 
   const token = search
     ? tokenGenerate(user)
