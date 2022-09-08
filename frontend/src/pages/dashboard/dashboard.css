@@ -1,0 +1,24 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 412px) {
+}
+
+@media (max-width: 393px) {
+}
+
+@media (max-width: 360px) {
+  fieldset {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  fieldset h1 {
+    color: #ef496c;
+  }
+}
