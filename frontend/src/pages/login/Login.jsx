@@ -20,10 +20,6 @@ export default function Login() {
   const [passwordValue, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // function redirectRegister() {
-  //   <Navigate replace to='/register' />;
-  // }
-
   async function checkPermissionOnThisPage() {
     const userLogin = await tryToLogin(emailValue, passwordValue);
 
@@ -73,6 +69,7 @@ export default function Login() {
           disabled={loginBlocking}
           onClick={checkPermissionOnThisPage}
         />
+        {!errorMessage ? '' : <p className='error-message'>{errorMessage}</p>}
       </fieldset>
     </div>
   );
