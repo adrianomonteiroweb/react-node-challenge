@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { tryGetAllData } from '../../utils/functions';
 
 import './dashboard.css';
+import PatientSectionComponent from './hashboardComponents/patientSection/PatientSectionComponent';
 
 export default function Dashboard() {
   const [allUsers, setAllUsers] = useState([]);
@@ -23,7 +24,10 @@ export default function Dashboard() {
         <h1 className='dashboard-title'>Dashboard</h1>
         <section className='patients-cards-section'>
           <h2>My Patients</h2>
-          {allUsers.length > 0 ? console.log(allUsers) : console.log('vazio')}
+          {allUsers.length > 0 &&
+            allUsers
+              .filter((patient) => patient.role !== 'admin')
+              .map((patient) => <PatientSectionComponent patient={patient} />)}
         </section>
       </fieldset>
     </div>
