@@ -32,6 +32,10 @@
     margin: 10px;
   }
 
+  fieldset .login-error {
+    border: 2px solid #ef496c;
+  }
+
   fieldset button {
     color: white;
     background-color: #ef496c;
@@ -40,5 +44,11 @@
     height: 50px;
     margin: 5px;
     width: 250px;
+  }
+
+  fieldset .error-message {
+    color: #ef496c;
+    font-size: 18px;
+    margin: 10px;
   }
 }
