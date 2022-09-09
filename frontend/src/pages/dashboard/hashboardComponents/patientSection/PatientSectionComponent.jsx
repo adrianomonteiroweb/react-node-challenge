@@ -4,7 +4,7 @@ export default function PatientSectionComponent({
   patient: { firstName, lastName },
 }) {
   return (
-    <div className='patient-section'>
+    <div className='carousel-card'>
       <h3 className='patient-name'>{`${firstName} ${lastName}`}</h3>
     </div>
   );

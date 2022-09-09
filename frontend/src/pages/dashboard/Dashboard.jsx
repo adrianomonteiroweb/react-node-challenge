@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import TouchCarousel from 'react-touch-carousel';
+import touchWithMouseHOC from 'react-touch-carousel/lib/touchWithMouseHOC';
 
 import { tryGetAllData } from '../../utils/functions';
 
@@ -7,6 +9,25 @@ import PatientSectionComponent from './hashboardComponents/patientSection/Patien
 
 export default function Dashboard() {
   const [allUsers, setAllUsers] = useState([]);
+
+  const cardSize = 310;
+
+  function CarouselContainer(props) {
+    const { cursor, ...rest } = props;
+    const translateX = cursor.toFixed(5) * cardSize;
+
+    return (
+      <div className={'carousel-container'}>
+        <div
+          className='carousel-track'
+          style={{ transform: `translate3d(${translateX}px, 0, 0)` }}
+          {...rest}
+        />
+      </div>
+    );
+  }
+
+  const Container = touchWithMouseHOC(CarouselContainer);
 
   async function getAllData() {
     const allUsers = await tryGetAllData('user');
@@ -18,18 +39,20 @@ export default function Dashboard() {
     getAllData();
   }, []);
 
+  function renderCard(index) {
+    return <PatientSectionComponent patient={allUsers[index]} />;
+  }
+
   return (
     <div className='dashboard-div'>
-      <fieldset>
-        <h1 className='dashboard-title'>Dashboard</h1>
-        <section className='patients-cards-section'>
-          <h2>My Patients</h2>
-          {allUsers.length > 0 &&
-            allUsers
-              .filter((patient) => patient.role !== 'admin')
-              .map((patient) => <PatientSectionComponent patient={patient} />)}
-        </section>
-      </fieldset>
+      <h1>Patients</h1>
+      <TouchCarousel
+        component={Container}
+        cardCount={allUsers.length}
+        cardSize={cardSize}
+        renderCard={renderCard}
+        loop={false}
+      />
     </div>
   );
 }
