@@ -35,14 +35,7 @@ const addUserService = async (body) => {
     role: role || 'user',
   });
 
-  return {
-    firstName: created.firstName,
-    lastName: created.lastName,
-    email: created.email,
-    password_hash: created.password_hash,
-    number: created.number,
-    role: created.role,
-  };
+  return created;
 };
 
 const updateUserService = async (id, body) => {
