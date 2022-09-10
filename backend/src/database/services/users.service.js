@@ -1,6 +1,7 @@
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
+const { passwordEncryption } = require('../../utils/passwordEncryption');
 const {
   BAD_REQUEST,
   OK,
@@ -16,11 +17,20 @@ const addUserService = async (body) => {
 
   const { firstName, lastName, email, password_hash, number, role } = body;
 
+  const userAlreadyExists = await users.findOne({
+    where: { email },
+  });
+
+  if (userAlreadyExists)
+    return errorMessageConstructor(BAD_REQUEST, 'User already exists');
+
+  const passwordEncrypted = passwordEncryption(password_hash);
+
   const created = await users.create({
     firstName,
     lastName,
     email,
-    password_hash,
+    password_hash: passwordEncrypted,
     number,
     role: role || 'user',
   });
@@ -55,7 +65,9 @@ const updateUserService = async (id, body) => {
 };
 
 const getUsersService = async () => {
-  const allUsers = await users.findAll();
+  const allUsers = await users.findAll({
+    attributes: { exclude: ['password_hash'] },
+  });
 
   return allUsers.length < 1
     ? errorMessageConstructor(
@@ -66,7 +78,9 @@ const getUsersService = async () => {
 };
 
 const getUserByIDService = async (id) => {
-  const userByID = await users.findByPk(id);
+  const userByID = await users.findByPk(id, {
+    attributes: { exclude: ['password_hash'] },
+  });
 
   return !userByID
     ? errorMessageConstructor(
@@ -79,6 +93,7 @@ const getUserByIDService = async (id) => {
 const getUserByEmailService = async (email) => {
   const userByEmail = await users.findOne({
     where: { email },
+    attributes: { exclude: ['password_hash'] },
   });
 
   return !userByEmail

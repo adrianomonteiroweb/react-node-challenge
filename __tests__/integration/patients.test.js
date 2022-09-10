@@ -1,4 +1,7 @@
 const shell = require('shelljs');
+const {
+  passwordEncryption,
+} = require('../../backend/src/utils/passwordEncryption');
 
 const {
   frisbyPostFunction,
@@ -23,6 +26,14 @@ const patient_created = {
   email: 'alex@email.com',
   password_hash: 'abcdefg1',
   number: '85989876655',
+};
+
+const result_patient_created = {
+  firstName: 'Alex',
+  lastName: 'Montes',
+  email: 'alex@email.com',
+  password_hash: passwordEncryption(patient_created.password_hash),
+  number: '85989876655',
   role: 'user',
 };
 
@@ -31,6 +42,15 @@ const patient_created2 = {
   lastName: 'Santos',
   email: 'marcela@email.com',
   password_hash: 'abcdefg2',
+  number: '88999403456',
+  role: 'user',
+};
+
+const result_patient_created2 = {
+  firstName: 'Marcela',
+  lastName: 'Santos',
+  email: 'marcela@email.com',
+  password_hash: passwordEncryption(patient_created2.password_hash),
   number: '88999403456',
   role: 'user',
 };
@@ -113,23 +133,22 @@ const patient_updated = {
 describe('# Patients tests.', () => {
   describe('Creating patients - Testing required fields.', () => {
     beforeEach(() => {
-      shell.exec('cd ./packages/backend && yarn sequelize-cli db:drop');
-      shell.exec(
-        'cd ./packages/backend && yarn sequelize-cli db:create && yarn sequelize-cli db:migrate'
-      );
+      shell.exec('yarn db:drop');
+      shell.exec('yarn db:create && yarn db:migrate');
     });
 
-    it.skip('1/7 - It should be possible to add a new patient user.', async () => {
+    it.skip('1/8 - It should be possible to add a new patient user.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
         patient_created
       );
+
       expect(frisby._response.status).toEqual(201);
-      expect(frisby._json).toEqual(patient_created);
+      expect(frisby._json).toEqual(result_patient_created);
     });
 
-    it.skip('2/7 - It should not be possible to register a patient without the email.', async () => {
+    it.skip('2/8 - It should not be possible to register a patient without the email.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -140,7 +159,7 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"email" is required' });
     });
 
-    it.skip('3/7 - It should not be possible to register a patient without the password.', async () => {
+    it.skip('3/8 - It should not be possible to register a patient without the password.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -151,7 +170,7 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"password" is required' });
     });
 
-    it.skip('4/7 - It should not be possible to register a patient without the number.', async () => {
+    it.skip('4/8 - It should not be possible to register a patient without the number.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -162,7 +181,7 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"number" is required' });
     });
 
-    it.skip('5/7 - It should not be possible to register a patient without the firstName.', async () => {
+    it.skip('5/8 - It should not be possible to register a patient without the firstName.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -173,7 +192,7 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"firstName" is required' });
     });
 
-    it.skip('6/7 - It should not be possible to register a patient without the lastName.', async () => {
+    it.skip('6/8 - It should not be possible to register a patient without the lastName.', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
@@ -184,15 +203,28 @@ describe('# Patients tests.', () => {
       expect(frisby._json).toEqual({ message: '"lastName" is required' });
     });
 
-    it.skip('7/7 - It should not be possible to register a patient without the role.', async () => {
+    it.skip('7/8 - A user without role information will be classified as a "user".', async () => {
       const frisby = await frisbyPostFunction(
         base_url,
         'user',
         patient_without_role
       );
 
+      expect(frisby._response.status).toEqual(201);
+      expect(frisby._json.role).toEqual('user');
+    });
+
+    it.skip('8/8 - It should not be possible to create a user with already existing email.', async () => {
+      await frisbyPostFunction(base_url, 'user', patient_created);
+
+      const frisby = await frisbyPostFunction(
+        base_url,
+        'user',
+        patient_created
+      );
+
       expect(frisby._response.status).toEqual(400);
-      expect(frisby._json).toEqual({ message: '"role" is required' });
+      expect(frisby._json).toEqual({ message: 'User already exists' });
     });
   });
 
@@ -282,10 +314,13 @@ describe('# Patients tests.', () => {
 
       const frisby = await frisbyGetFunction(base_url, 'user');
 
+      delete result_patient_created.password_hash;
+      delete result_patient_created2.password_hash;
+
       expect(frisby._response.status).toEqual(200);
       expect(frisby._json).toEqual([
-        { ...patient_created, id: 1 },
-        { ...patient_created2, id: 2 },
+        { ...result_patient_created, id: 1 },
+        { ...result_patient_created2, id: 2 },
       ]);
     });
 
@@ -295,20 +330,24 @@ describe('# Patients tests.', () => {
 
       const frisby = await frisbyGetFunction(base_url, 'user/2');
 
+      delete result_patient_created2.password_hash;
+
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
+      expect(frisby._json).toEqual({ ...result_patient_created2, id: 2 });
     });
 
     it.skip('3/5 - It must be possible to search for a patient by email.', async () => {
       await frisbyPostFunction(base_url, 'user', patient_created);
       await frisbyPostFunction(base_url, 'user', patient_created2);
 
-      const frisby = await frisbyPostFunction(base_url, 'patient/email', {
+      const frisby = await frisbyPostFunction(base_url, 'user/email', {
         email: patient_created2.email,
       });
 
+      delete result_patient_created2.password_hash;
+
       expect(frisby._response.status).toEqual(200);
-      expect(frisby._json).toEqual({ ...patient_created2, id: 2 });
+      expect(frisby._json).toEqual({ ...result_patient_created2, id: 2 });
     });
 
     it.skip('4/5 - It should not be possible to search for a patient by non-existent id.', async () => {
