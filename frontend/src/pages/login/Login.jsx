@@ -20,7 +20,8 @@ export default function Login() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [statusNavigate, setStatusNavigate] = useState(false);
+  const [statusAdminNavigate, setStatusAdminNavigate] = useState(false);
+  const [statusUserNavigate, setStatusUserNavigate] = useState(false);
 
   async function checkPermissionOnThisPage() {
     const userLogin = await tryToLogin(emailValue, passwordValue);
@@ -31,7 +32,8 @@ export default function Login() {
       const token = tokenDecode(userLogin.data.token);
       localStorage.user = JSON.stringify(userLogin.data);
 
-      if (token.user.role === 'admin') setStatusNavigate(true);
+      if (token.user.role === 'admin') setStatusAdminNavigate(true);
+      if (token.user.role === 'user') setStatusUserNavigate(true);
     }
   }
 
@@ -45,7 +47,8 @@ export default function Login() {
 
   return (
     <div className='login-div'>
-      {statusNavigate && <Navigate replace to='/dashboard' />}
+      {statusAdminNavigate && <Navigate replace to='/dashboard' />}
+      {statusUserNavigate && <Navigate replace to='/treatments' />}
       <fieldset>
         <h1 className='login-title'>MyPatients</h1>
         <Input
