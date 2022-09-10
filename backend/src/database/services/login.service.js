@@ -2,6 +2,7 @@ const { tokenGenerate } = require('../../middlewares/auth');
 const {
   errorMessageConstructor,
 } = require('../../utils/errorMessageConstructor');
+const { passwordEncryption } = require('../../utils/passwordEncryption');
 const {
   BAD_REQUEST,
   UNAUTHORIZED,
@@ -16,8 +17,10 @@ const loginUserService = async (body) => {
 
   const { email, password_hash } = body;
 
+  const password_encrypted = passwordEncryption(password_hash);
+
   const search = await users.findOne({
-    where: { email, password_hash },
+    where: { email, password_hash: password_encrypted },
   });
 
   const user = {
