@@ -32,7 +32,9 @@ export default function Dashboard() {
   async function getAllData() {
     const allUsers = await tryGetAllData('user');
 
-    if (allUsers) setAllUsers(allUsers.data);
+    const data = allUsers.data.filter((user) => user.role !== 'admin');
+
+    if (allUsers) setAllUsers(data);
   }
 
   useEffect(() => {
